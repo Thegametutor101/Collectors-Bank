@@ -13,13 +13,13 @@ class MTGSetFields {
 
 class MTGSet {
   final String name;
-  final String? code;
+  final String code;
   final String date;
   final String is_promo;
 
   MTGSet(
       {required this.name,
-      this.code,
+      required this.code,
       required this.date,
       required this.is_promo});
 

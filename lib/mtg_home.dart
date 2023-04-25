@@ -1,6 +1,7 @@
-import 'package:collectors_bank/db/mtg_database.dart';
-import 'package:collectors_bank/models/mtg_set.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import './models/mtg_set.dart';
 
 class MTGHomePage extends StatefulWidget {
   const MTGHomePage({super.key});
@@ -10,29 +11,16 @@ class MTGHomePage extends StatefulWidget {
 }
 
 class _MTGHomePageState extends State<MTGHomePage> {
-  late List<MTGSet> sets;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    refreshSets();
-  }
-
-  @override
-  void dispose() {
-    MTGDatabase.instance.close();
-
-    super.dispose();
-  }
-
-  Future refreshSets() async {
-    setState(() => isLoading = true);
-
-    this.sets = await MTGDatabase.instance.selectAllSets();
-
-    setState(() => isLoading = false);
+  Future getSets() async {
+    String url =
+        "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_sets_entity.php";
+    var result =
+        await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
+    List<MTGSet> list = [];
+    for (var item in json.decode(result.body)) {
+      list.add(MTGSet.fromJson(item));
+    }
+    return list;
   }
 
   @override
@@ -43,19 +31,30 @@ class _MTGHomePageState extends State<MTGHomePage> {
         title: const Text('Collector\'s Bank  -  MTG'),
         backgroundColor: const Color.fromARGB(255, 250, 10, 10),
       ),
-      body: Expanded(
-        child: ListView.builder(
-          itemCount: sets.length,
-          itemBuilder: (BuildContext context, index) {
-            return Container(
-              height: 20,
-              margin: const EdgeInsets.all(5),
-              child: Center(
-                child: Text(sets[index].name),
-              ),
+      body: FutureBuilder(
+        future: getSets(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          List<MTGSet> sets = snapshot.data;
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        ),
+          }
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('Error fetching MTG Sets.'),
+            );
+          }
+          return ListView.builder(
+            itemCount: sets.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(sets[index].name),
+                subtitle: Text(sets[index].code),
+              );
+            },
+          );
+        },
       ),
     );
   }
