@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 100, 100, 100),
+      backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(
         title: const Text(
           'Collector\'s Bank',
@@ -34,14 +34,9 @@ class HomePage extends StatelessWidget {
         width: double.infinity,
         alignment: Alignment.topCenter,
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-        child: ElevatedButton(
-          child: const Text(
-            'MTG',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 30,
-            ),
-          ),
+        child: IconButton(
+          icon: const Image(image: AssetImage('lib/assets/mtg_default.png')),
+          iconSize: 250,
           onPressed: () {
             Navigator.push(
               context,
