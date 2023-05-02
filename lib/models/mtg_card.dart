@@ -30,7 +30,8 @@ class MTGCardFields {
     watermark,
     print_number,
     is_original,
-    color_identity
+    color_identity,
+    image
   ];
 
   static const String id = 'Nid';
@@ -60,10 +61,11 @@ class MTGCardFields {
   static const String print_number = 'Nprint_number';
   static const String is_original = 'Nis_original';
   static const String color_identity = 'Ncolor_identity';
+  static const String image = 'image';
 }
 
 class MTGCard {
-  final String? id;
+  final String id;
   final String name;
   final String set;
   final String type;
@@ -90,9 +92,10 @@ class MTGCard {
   final String print_number;
   final String is_original;
   final String color_identity;
+  final String image;
 
   MTGCard(
-      {this.id,
+      {required this.id,
       required this.name,
       required this.set,
       required this.type,
@@ -118,7 +121,8 @@ class MTGCard {
       required this.watermark,
       required this.print_number,
       required this.is_original,
-      required this.color_identity});
+      required this.color_identity,
+      required this.image});
 
   static MTGCard fromJson(Map<String, Object?> json) => MTGCard(
       id: json[MTGCardFields.id] as String,
@@ -126,26 +130,35 @@ class MTGCard {
       set: json[MTGCardFields.set] as String,
       type: json[MTGCardFields.type] as String,
       rarity: json[MTGCardFields.rarity] as String,
-      manacost: json[MTGCardFields.manacost] as String,
-      converted_manacost: json[MTGCardFields.converted_manacost] as String,
-      power: json[MTGCardFields.power] as String,
-      toughness: json[MTGCardFields.toughness] as String,
-      loyalty: json[MTGCardFields.loyalty] as String,
-      ability: json[MTGCardFields.ability] as String,
-      flavor: json[MTGCardFields.flavor] as String,
-      variation: json[MTGCardFields.variation] as String,
-      artist: json[MTGCardFields.artist] as String,
-      number: json[MTGCardFields.number] as String,
-      rating: json[MTGCardFields.rating] as String,
-      ruling: json[MTGCardFields.ruling] as String,
-      color: json[MTGCardFields.color] as String,
-      generated_mana: json[MTGCardFields.generated_mana] as String,
-      pricing_EUR: json[MTGCardFields.pricing_EUR] as String,
-      pricing_USD: json[MTGCardFields.pricing_USD] as String,
-      pricing_TIX: json[MTGCardFields.pricing_TIX] as String,
-      back_id: json[MTGCardFields.back_id] as String,
-      watermark: json[MTGCardFields.watermark] as String,
-      print_number: json[MTGCardFields.print_number] as String,
-      is_original: json[MTGCardFields.is_original] as String,
-      color_identity: json[MTGCardFields.color_identity] as String);
+      manacost: checkIfNull(json[MTGCardFields.manacost]),
+      converted_manacost: checkIfNull(json[MTGCardFields.converted_manacost]),
+      power: checkIfNull(json[MTGCardFields.power]),
+      toughness: checkIfNull(json[MTGCardFields.toughness]),
+      loyalty: checkIfNull(json[MTGCardFields.loyalty]),
+      ability: checkIfNull(json[MTGCardFields.ability]),
+      flavor: checkIfNull(json[MTGCardFields.flavor]),
+      variation: checkIfNull(json[MTGCardFields.variation]),
+      artist: checkIfNull(json[MTGCardFields.artist]),
+      number: checkIfNull(json[MTGCardFields.number]),
+      rating: checkIfNull(json[MTGCardFields.rating]),
+      ruling: checkIfNull(json[MTGCardFields.ruling]),
+      color: checkIfNull(json[MTGCardFields.color]),
+      generated_mana: checkIfNull(json[MTGCardFields.generated_mana]),
+      pricing_EUR: checkIfNull(json[MTGCardFields.pricing_EUR]),
+      pricing_USD: checkIfNull(json[MTGCardFields.pricing_USD]),
+      pricing_TIX: checkIfNull(json[MTGCardFields.pricing_TIX]),
+      back_id: checkIfNull(json[MTGCardFields.back_id]),
+      watermark: checkIfNull(json[MTGCardFields.watermark]),
+      print_number: checkIfNull(json[MTGCardFields.print_number]),
+      is_original: checkIfNull(json[MTGCardFields.is_original]),
+      color_identity: checkIfNull(json[MTGCardFields.color_identity]),
+      image: checkIfNull(json[MTGCardFields.image]));
+
+  static String checkIfNull(Object? item) {
+    if (item == null) {
+      return '';
+    } else {
+      return item as String;
+    }
+  }
 }

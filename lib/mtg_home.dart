@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import './models/mtg_set.dart';
+import './mtg_set_page.dart';
 
 class MTGHomePage extends StatefulWidget {
   const MTGHomePage({super.key});
@@ -13,7 +14,7 @@ class MTGHomePage extends StatefulWidget {
 class _MTGHomePageState extends State<MTGHomePage> {
   Future<List<MTGSet>> getSets() async {
     String url =
-        "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_sets_entity.php";
+        "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getSets.php";
     var result =
         await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
     List<MTGSet> list = [];
@@ -75,7 +76,25 @@ class _MTGHomePageState extends State<MTGHomePage> {
                 return ListTile(
                   textColor: const Color.fromARGB(255, 250, 250, 250),
                   title: Text(sets[index].name),
-                  subtitle: Text(sets[index].code),
+                  subtitle: Flex(
+                    direction: Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(sets[index].code),
+                      const Text('0/100'),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MTGSetPage(
+                            setCode: sets[index].code,
+                            setName: sets[index].name),
+                      ),
+                    );
+                  },
                 );
               },
             );
