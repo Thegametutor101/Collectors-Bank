@@ -1,33 +1,37 @@
 import 'dart:isolate';
 
-import 'package:collectors_bank/mtg_card_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import './models/mtg_card.dart';
 
-class MTGSetPage extends StatefulWidget {
-  const MTGSetPage({super.key, required this.setCode, required this.setName});
+class MTGCardPage extends StatefulWidget {
+  const MTGCardPage(
+      {super.key,
+      required this.cardCode,
+      required this.cardName,
+      required this.setCode});
 
+  final String cardCode;
+  final String cardName;
   final String setCode;
-  final String setName;
 
   @override
-  State<MTGSetPage> createState() => _MTGSetPage();
+  State<MTGCardPage> createState() => _MTGCardPage();
 }
 
-class _MTGSetPage extends State<MTGSetPage> {
-  Future<List<MTGCard>> getCards(setCode) async {
+class _MTGCardPage extends State<MTGCardPage> {
+  Future<MTGCard> getCard(cardCode) async {
     String url =
-        "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getCards.php?setCode=$setCode";
+        "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getCard.php?cardCode=$cardCode";
     var result =
         await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
     if (result.statusCode == 200) {
       final parser = JsonParserMTGCard(result.body);
       return parser.parseInBackground();
     } else {
-      throw Exception('Failed to retreive Cards Json.');
+      throw Exception('Failed to retreive Card Json.');
     }
   }
 
@@ -42,16 +46,17 @@ class _MTGSetPage extends State<MTGSetPage> {
 
   @override
   Widget build(BuildContext context) {
+    String cardCode = widget.cardCode;
+    String cardName = widget.cardName;
     String setCode = widget.setCode;
-    String setName = widget.setName;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(
-        title: Text('MTG - $setName'),
+        title: Text('$setCode - $cardName'),
         backgroundColor: const Color.fromARGB(255, 250, 10, 10),
       ),
-      body: FutureBuilder<List<MTGCard>>(
-        future: getCards(setCode),
+      body: FutureBuilder<MTGCard>(
+        future: getCard(cardCode),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||
               snapshot.connectionState == ConnectionState.waiting) {
@@ -83,52 +88,41 @@ class _MTGSetPage extends State<MTGSetPage> {
               snapshot.hasError) {
             return Center(
               child: Text(
-                  'Error fetching cards from set $setName. ${snapshot.error.toString()}'),
+                  'Error fetching card $setCode - $cardName. ${snapshot.error.toString()}'),
             );
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            List<MTGCard> cards = snapshot.data;
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-              ),
-              itemCount: cards.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: EdgeInsets.zero,
+            MTGCard card = snapshot.data;
+            return Flex(
+              direction: Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    card.name,
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 250, 250, 250),
+                    ),
+                  ),
+                ),
+                Card(
+                  margin: const EdgeInsets.only(top: 20),
                   color: const Color.fromARGB(0, 0, 0, 0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => MTGCardPage(
-                              cardCode: cards[index].id,
-                              cardName: cards[index].name,
-                              setCode: setCode),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: checkIfImage(cards[index].image),
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                    ),
+                  child: Image(
+                    image: checkIfImage(card.image),
                   ),
-                );
-              },
+                ),
+              ],
             );
           }
           return Center(
-            child: Text('Error fetching the cards for the $setName set.'),
+            child: Text('Error fetching the $setCode - $cardName card.'),
           );
         },
       ),
@@ -140,7 +134,7 @@ class JsonParserMTGCard {
   JsonParserMTGCard(this.encodedJson);
   final String encodedJson;
 
-  Future<List<MTGCard>> parseInBackground() async {
+  Future<MTGCard> parseInBackground() async {
     final p = ReceivePort();
     await Isolate.spawn(_decodeAndParseJson, p.sendPort);
     return await p.first;
@@ -149,7 +143,7 @@ class JsonParserMTGCard {
   Future<void> _decodeAndParseJson(SendPort port) async {
     final jsonData = jsonDecode(encodedJson);
     final resultJson = jsonData as List<dynamic>;
-    final result = resultJson.map((json) => MTGCard.fromJson(json)).toList();
-    Isolate.exit(port, result);
+    final result = resultJson.map((json) => MTGCard.fromJson(json));
+    Isolate.exit(port, result.first);
   }
 }
