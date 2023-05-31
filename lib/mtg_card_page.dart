@@ -1,10 +1,9 @@
 import 'dart:isolate';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import './models/mtg_card.dart';
+import 'package:collectors_bank/DB/models/mtg_card.dart';
 
 class MTGCardPage extends StatefulWidget {
   const MTGCardPage(
@@ -37,7 +36,9 @@ class _MTGCardPage extends State<MTGCardPage> {
 
   ImageProvider checkIfImage(String image) {
     if (image == '') {
-      return const Image(image: AssetImage('lib/assets/mtg_default.png')).image;
+      return const Image(
+              image: AssetImage('lib/assets/No_Image_Found_Template.png'))
+          .image;
     } else {
       return Image.memory(Uri.parse(image).data?.contentAsBytes() as Uint8List)
           .image;
@@ -98,16 +99,6 @@ class _MTGCardPage extends State<MTGCardPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    card.name,
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 250, 250, 250),
-                    ),
-                  ),
-                ),
                 Card(
                   margin: const EdgeInsets.only(top: 20),
                   color: const Color.fromARGB(0, 0, 0, 0),
@@ -118,6 +109,99 @@ class _MTGCardPage extends State<MTGCardPage> {
                     image: checkIfImage(card.image),
                   ),
                 ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const Text(
+                              "Owned",
+                              style: TextStyle(
+                                fontSize: 26,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const Icon(
+                              Icons.add,
+                              color: Color.fromARGB(255, 250, 250, 250),
+                              size: 26,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const Text(
+                              "27",
+                              style: TextStyle(
+                                fontSize: 46,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const Icon(
+                              Icons.remove,
+                              color: Color.fromARGB(255, 250, 250, 250),
+                              size: 26,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const Text(
+                              "In Use",
+                              style: TextStyle(
+                                fontSize: 26,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const Icon(
+                              Icons.add,
+                              color: Color.fromARGB(255, 250, 250, 250),
+                              size: 26,
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const Text(
+                              "3",
+                              style: TextStyle(
+                                fontSize: 46,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 20),
+                            child: const Icon(
+                              Icons.remove,
+                              color: Color.fromARGB(255, 250, 250, 250),
+                              size: 26,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               ],
             );
           }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import './models/mtg_set.dart';
-import './mtg_set_page.dart';
+import 'dart:isolate';
+import 'package:collectors_bank/DB/models/mtg_set.dart';
+import 'package:collectors_bank/mtg_set_page.dart';
 
 class MTGHomePage extends StatefulWidget {
   const MTGHomePage({super.key});
@@ -17,11 +18,12 @@ class _MTGHomePageState extends State<MTGHomePage> {
         "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getSets.php";
     var result =
         await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
-    List<MTGSet> list = [];
-    for (var item in json.decode(result.body)) {
-      list.add(MTGSet.fromJson(item));
+    if (result.statusCode == 200) {
+      final parser = JsonParserMTGSets(result.body);
+      return parser.parseInBackground();
+    } else {
+      throw Exception('Failed to retreive Cards Json.');
     }
-    return list;
   }
 
   @override
@@ -105,5 +107,23 @@ class _MTGHomePageState extends State<MTGHomePage> {
         },
       ),
     );
+  }
+}
+
+class JsonParserMTGSets {
+  JsonParserMTGSets(this.encodedJson);
+  final String encodedJson;
+
+  Future<List<MTGSet>> parseInBackground() async {
+    final p = ReceivePort();
+    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
+    return await p.first;
+  }
+
+  Future<void> _decodeAndParseJson(SendPort port) async {
+    final jsonData = jsonDecode(encodedJson);
+    final resultJson = jsonData as List<dynamic>;
+    final result = resultJson.map((json) => MTGSet.fromJson(json)).toList();
+    Isolate.exit(port, result);
   }
 }

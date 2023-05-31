@@ -1,11 +1,10 @@
 import 'dart:isolate';
-
 import 'package:collectors_bank/mtg_card_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import './models/mtg_card.dart';
+import 'package:collectors_bank/DB/models/mtg_card.dart';
 
 class MTGSetPage extends StatefulWidget {
   const MTGSetPage({super.key, required this.setCode, required this.setName});
@@ -33,7 +32,9 @@ class _MTGSetPage extends State<MTGSetPage> {
 
   ImageProvider checkIfImage(String image) {
     if (image == '') {
-      return const Image(image: AssetImage('lib/assets/mtg_default.png')).image;
+      return const Image(
+              image: AssetImage('lib/assets/No_Image_Found_Template.png'))
+          .image;
     } else {
       return Image.memory(Uri.parse(image).data?.contentAsBytes() as Uint8List)
           .image;
