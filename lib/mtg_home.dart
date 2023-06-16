@@ -1,3 +1,4 @@
+import 'package:collectors_bank/DB/data/data_mtg.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -6,7 +7,9 @@ import 'package:collectors_bank/DB/models/mtg_set.dart';
 import 'package:collectors_bank/mtg_set_page.dart';
 
 class MTGHomePage extends StatefulWidget {
-  const MTGHomePage({super.key});
+  const MTGHomePage({super.key, required this.mtgData});
+
+  final List<MTGData> mtgData;
 
   @override
   State<MTGHomePage> createState() => _MTGHomePageState();
@@ -26,8 +29,17 @@ class _MTGHomePageState extends State<MTGHomePage> {
     }
   }
 
+  String getSetCollected(String setCode, List<MTGData> mtgData) {
+    String collected = '0';
+    for (var set in mtgData) {
+      if (set.dataSet.setCode == setCode) collected = set.dataSet.collected;
+    }
+    return collected;
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<MTGData> mtgData = widget.mtgData;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(
@@ -84,7 +96,8 @@ class _MTGHomePageState extends State<MTGHomePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(sets[index].code),
-                      const Text('0/100'),
+                      Text(
+                          "${getSetCollected(sets[index].code, mtgData)}/${sets[index].cardCount}"),
                     ],
                   ),
                   onTap: () {

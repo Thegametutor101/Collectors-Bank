@@ -9,9 +9,9 @@ class MTGDataFeilds {
 class MTGDataSetFeilds {
   static final List<String> values = [setCode, collected, card];
 
-  static const String setCode = 'Nname';
-  static const String collected = 'Ncode';
-  static const String card = 'Ndate';
+  static const String setCode = 'setCode';
+  static const String collected = 'collected';
+  static const String card = 'DataCard';
 }
 
 class MTGDataCardFeilds {
@@ -23,7 +23,7 @@ class MTGDataCardFeilds {
 }
 
 class MTGData {
-  final List<MTGDataSet> dataSet;
+  final MTGDataSet dataSet;
 
   MTGData({required this.dataSet});
 
@@ -33,13 +33,14 @@ class MTGData {
               json[MTGDataFeilds.dataSet][MTGDataSetFeilds.setCode]),
           collected: checkIfNull(
               json[MTGDataFeilds.dataSet][MTGDataSetFeilds.collected]),
-          card: MTGDataCard(
-              cardCode: checkIfNull(json[MTGDataFeilds.dataSet]
-                  [MTGDataSetFeilds.card][MTGDataCardFeilds.cardCode]),
-              owned: checkIfNull(json[MTGDataFeilds.dataSet]
-                  [MTGDataSetFeilds.card][MTGDataCardFeilds.cardCode]),
-              inUse: checkIfNull(json[MTGDataFeilds.dataSet]
-                  [MTGDataSetFeilds.card][MTGDataCardFeilds.cardCode]))));
+          card: json[MTGDataFeilds.dataSet][MTGDataSetFeilds.card]
+              .map<MTGDataCard>((json) => _loopDataCards(json))
+              .toList()));
+
+  static MTGDataCard _loopDataCards(Map<String, dynamic> json) => MTGDataCard(
+      cardCode: checkIfNull(json[MTGDataCardFeilds.cardCode]),
+      owned: checkIfNull(json[MTGDataCardFeilds.owned]),
+      inUse: checkIfNull(json[MTGDataCardFeilds.inUse]));
 
   static String checkIfNull(Object? item) {
     if (item == null) {

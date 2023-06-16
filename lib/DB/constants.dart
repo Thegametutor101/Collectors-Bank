@@ -15,10 +15,8 @@ class Constants {
   static Future<File> _localFile(String name) async {
     final path = await _localPath;
     if (await File('$path/$name').exists()) {
-      print("file '$path/$name' exist.");
       return File('$path/$name');
     } else {
-      print("file '$path/$name' does not exist.");
       return File('$path/$name').create();
     }
   }
@@ -37,7 +35,7 @@ class Constants {
   static Future<File> writeMTGData() async {
     final file = await _localFile('MTGData.json');
     return file.writeAsString(
-        '{"DataSet" : {"setCode" : "MOM","collected" : "92","DataCard" : {"cardCode" : "678354","owned" : "2","inUse" : "1"}}}');
+        '[{"DataSet" : {"setCode" : "4ED","collected" : "92","DataCard" : [{"cardCode" : "678354","owned" : "2","inUse" : "1"}]}}]');
   }
 
   static Future<void> deleteMTGData() async {
@@ -57,13 +55,9 @@ class JsonParserMTG {
   }
 
   Future<void> _decodeAndParseJson(SendPort port) async {
-    print("encodedJson: " + encodedJson);
     final jsonData = jsonDecode(encodedJson);
-    print("jsonData");
-    print(jsonData);
-    final resultJson = jsonData as Map<String, dynamic>;
-    print(resultJson);
-    final result = MTGData.fromJson(resultJson);
-    Isolate.exit(port, resultJson);
+    final resultJson = jsonData as List<dynamic>;
+    final result = resultJson.map((json) => MTGData.fromJson(json)).toList();
+    Isolate.exit(port, result);
   }
 }

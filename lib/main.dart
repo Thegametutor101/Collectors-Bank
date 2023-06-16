@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:collectors_bank/mtg_home.dart';
 import 'package:collectors_bank/DB/constants.dart';
+import 'package:collectors_bank/DB/data/data_mtg.dart';
 
 void main(List<String> args) {
   runApp(const CollectorsBank());
@@ -24,7 +25,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Constants.readMTGData();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(
@@ -45,7 +45,15 @@ class HomePage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => const MTGHomePage(),
+                builder: (_) => FutureBuilder<List<MTGData>>(
+                    future: Constants.readMTGData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<MTGData> mtgData = snapshot.data as List<MTGData>;
+                        return MTGHomePage(mtgData: mtgData);
+                      }
+                      return const CircularProgressIndicator();
+                    }),
               ),
             );
           },
