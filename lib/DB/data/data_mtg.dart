@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class MTGDataFeilds {
@@ -37,6 +39,16 @@ class MTGData {
               .map<MTGDataCard>((json) => _loopDataCards(json))
               .toList()));
 
+  Map<String, dynamic> toJson() {
+    return {
+      'DataSet': {
+        "setCode": dataSet.setCode,
+        "collected": dataSet.setCode,
+        "DataCard": [jsonEncode(dataSet.card)]
+      }
+    };
+  }
+
   static MTGDataCard _loopDataCards(Map<String, dynamic> json) => MTGDataCard(
       cardCode: checkIfNull(json[MTGDataCardFeilds.cardCode]),
       owned: checkIfNull(json[MTGDataCardFeilds.owned]),
@@ -53,8 +65,8 @@ class MTGData {
 
 class MTGDataSet {
   final String setCode;
-  final String collected;
-  final List<MTGDataCard> card;
+  String collected;
+  List<MTGDataCard> card;
 
   MTGDataSet(
       {required this.setCode, required this.collected, required this.card});
@@ -62,9 +74,13 @@ class MTGDataSet {
 
 class MTGDataCard {
   final String cardCode;
-  final String owned;
-  final String inUse;
+  String owned;
+  String inUse;
 
   MTGDataCard(
       {required this.cardCode, required this.owned, required this.inUse});
+
+  Map<String, dynamic> toJson() {
+    return {"cardCode": cardCode, "owned": owned, "inUse": inUse};
+  }
 }

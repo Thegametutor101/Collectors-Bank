@@ -45,15 +45,7 @@ class HomePage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => FutureBuilder<List<MTGData>>(
-                    future: Constants.readMTGData(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<MTGData> mtgData = snapshot.data as List<MTGData>;
-                        return MTGHomePage(mtgData: mtgData);
-                      }
-                      return const CircularProgressIndicator();
-                    }),
+                builder: (_) => const MTGHomePage(),
               ),
             );
           },

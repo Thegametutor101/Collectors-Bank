@@ -1,10 +1,12 @@
-import 'dart:isolate';
+import 'package:collectors_bank/DB/constants.dart';
+import 'package:collectors_bank/DB/data/data_mtg.dart';
 import 'package:collectors_bank/mtg_card_page.dart';
+import 'package:collectors_bank/DB/models/mtg_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:collectors_bank/DB/models/mtg_card.dart';
+import 'dart:isolate';
 
 class MTGSetPage extends StatefulWidget {
   const MTGSetPage({super.key, required this.setCode, required this.setName});
@@ -17,6 +19,18 @@ class MTGSetPage extends StatefulWidget {
 }
 
 class _MTGSetPage extends State<MTGSetPage> {
+  late List<MTGData> mtgData;
+
+  void loadMtgData() async {
+    mtgData = await Constants.readMTGData();
+  }
+
+  void updateMTGData(List<MTGData> mtgData) {
+    setState(() {
+      this.mtgData = mtgData;
+    });
+  }
+
   Future<List<MTGCard>> getCards(setCode) async {
     String url =
         "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getCards.php?setCode=$setCode";
@@ -45,6 +59,7 @@ class _MTGSetPage extends State<MTGSetPage> {
   Widget build(BuildContext context) {
     String setCode = widget.setCode;
     String setName = widget.setName;
+    loadMtgData();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(

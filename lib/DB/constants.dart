@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:collectors_bank/DB/data/data_mtg.dart';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Constants {
@@ -25,6 +24,9 @@ class Constants {
     try {
       final file = await _localFile('MTGData.json');
       final contents = await file.readAsString();
+      print('contents:');
+      print(contents);
+      if (contents.isEmpty) return List.empty();
       final parser = JsonParserMTG(contents);
       return parser.parseInBackground();
     } catch (e) {
@@ -32,15 +34,19 @@ class Constants {
     }
   }
 
-  static Future<File> writeMTGData() async {
+  static Future<File> writeMTGData(List<MTGData> mtgData) async {
     final file = await _localFile('MTGData.json');
-    return file.writeAsString(
-        '[{"DataSet" : {"setCode" : "4ED","collected" : "92","DataCard" : [{"cardCode" : "678354","owned" : "2","inUse" : "1"}]}}]');
+    return file.writeAsString(_MTGDataToString(mtgData));
   }
 
   static Future<void> deleteMTGData() async {
     final file = await _localFile('MTGData.json');
     file.delete();
+  }
+
+  // ignore: non_constant_identifier_names
+  static String _MTGDataToString(List<MTGData> mtgData) {
+    return jsonEncode(mtgData);
   }
 }
 

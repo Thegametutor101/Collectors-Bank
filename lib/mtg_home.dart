@@ -1,3 +1,4 @@
+import 'package:collectors_bank/DB/constants.dart';
 import 'package:collectors_bank/DB/data/data_mtg.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,15 +8,25 @@ import 'package:collectors_bank/DB/models/mtg_set.dart';
 import 'package:collectors_bank/mtg_set_page.dart';
 
 class MTGHomePage extends StatefulWidget {
-  const MTGHomePage({super.key, required this.mtgData});
-
-  final List<MTGData> mtgData;
+  const MTGHomePage({super.key});
 
   @override
   State<MTGHomePage> createState() => _MTGHomePageState();
 }
 
 class _MTGHomePageState extends State<MTGHomePage> {
+  late List<MTGData> mtgData;
+
+  void loadMtgData() async {
+    mtgData = await Constants.readMTGData();
+  }
+
+  void updateMTGData(List<MTGData> mtgData) {
+    setState(() {
+      this.mtgData = mtgData;
+    });
+  }
+
   Future<List<MTGSet>> getSets() async {
     String url =
         "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getSets.php";
@@ -39,7 +50,7 @@ class _MTGHomePageState extends State<MTGHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<MTGData> mtgData = widget.mtgData;
+    loadMtgData();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(

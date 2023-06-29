@@ -1,4 +1,6 @@
 import 'dart:isolate';
+import 'package:collectors_bank/DB/constants.dart';
+import 'package:collectors_bank/DB/data/data_mtg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +23,19 @@ class MTGCardPage extends StatefulWidget {
 }
 
 class _MTGCardPage extends State<MTGCardPage> {
+  late List<MTGData> mtgData;
+
+  void loadMtgData() async {
+    mtgData = await Constants.readMTGData();
+  }
+
+  void updateMTGData(List<MTGData> mtgData) {
+    setState(() {
+      this.mtgData = mtgData;
+      Constants.writeMTGData(mtgData);
+    });
+  }
+
   Future<MTGCard> getCard(cardCode) async {
     String url =
         "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getCard.php?cardCode=$cardCode";
@@ -45,11 +60,85 @@ class _MTGCardPage extends State<MTGCardPage> {
     }
   }
 
+  String getCardValue(
+      String feild, String setCode, String cardCode, List<MTGData> mtgData) {
+    String value = '0';
+    for (var set in mtgData) {
+      if (set.dataSet.setCode == setCode) {
+        for (var card in set.dataSet.card) {
+          if (card.cardCode == cardCode) {
+            if (feild == "owned") value = card.owned;
+            if (feild == "inUse") value = card.inUse;
+          }
+        }
+      }
+    }
+    return value;
+  }
+
+  void changeCardValues(String method, String feild, String setCode,
+      String cardCode, List<MTGData> mtgData) {
+    checkIfExists(setCode, cardCode, mtgData);
+    for (var set in mtgData) {
+      if (set.dataSet.setCode == setCode) {
+        for (var card in set.dataSet.card) {
+          if (card.cardCode == cardCode) {
+            if (method == "add") {
+              if (feild == "owned") {
+                card.owned = (int.parse(card.owned) + 1).toString();
+              } else if (feild == "inUse") {
+                card.inUse = (int.parse(card.inUse) + 1).toString();
+              }
+            } else if (method == "remove") {
+              if (feild == "owned") {
+                card.owned = (int.parse(card.owned) - 1).toString();
+              } else if (feild == "inUse") {
+                card.inUse = (int.parse(card.inUse) - 1).toString();
+              }
+            }
+          }
+        }
+      }
+    }
+    updateMTGData(mtgData);
+  }
+
+  void checkIfExists(String setCode, String cardCode, List<MTGData> mtgData) {
+    bool setExists = false;
+    bool cardExists = false;
+    for (var set in mtgData) {
+      if (set.dataSet.setCode == setCode) {
+        setExists = true;
+        for (var card in set.dataSet.card) {
+          if (card.cardCode == cardCode) cardExists = true;
+        }
+      }
+    }
+    if (!setExists) {
+      List<MTGDataCard> mtgDataCardEmpty = [];
+      mtgDataCardEmpty
+          .add(MTGDataCard(cardCode: cardCode, owned: "0", inUse: "0"));
+      mtgData.add(MTGData(
+          dataSet: MTGDataSet(
+              setCode: setCode, collected: "0", card: mtgDataCardEmpty)));
+    }
+    if (!cardExists) {
+      for (var set in mtgData) {
+        if (set.dataSet.setCode == setCode) {
+          set.dataSet.card
+              .add(MTGDataCard(cardCode: cardCode, owned: "0", inUse: "0"));
+        }
+      }
+    }
+    updateMTGData(mtgData);
+  }
+
   @override
   Widget build(BuildContext context) {
     String cardCode = widget.cardCode;
     String cardName = widget.cardName;
     String setCode = widget.setCode;
+    loadMtgData();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(
@@ -131,17 +220,25 @@ class _MTGCardPage extends State<MTGCardPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 20),
-                            child: const Icon(
-                              Icons.add,
-                              color: Color.fromARGB(255, 250, 250, 250),
-                              size: 26,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  changeCardValues("add", "owned", setCode,
+                                      cardCode, mtgData);
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.add,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                                size: 26,
+                              ),
                             ),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 20),
-                            child: const Text(
-                              "27",
-                              style: TextStyle(
+                            child: Text(
+                              getCardValue("owned", setCode, cardCode, mtgData),
+                              style: const TextStyle(
                                 fontSize: 46,
                                 color: Color.fromARGB(255, 250, 250, 250),
                               ),
@@ -149,10 +246,18 @@ class _MTGCardPage extends State<MTGCardPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 20),
-                            child: const Icon(
-                              Icons.remove,
-                              color: Color.fromARGB(255, 250, 250, 250),
-                              size: 26,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  changeCardValues("remove", "owned", setCode,
+                                      cardCode, mtgData);
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.remove,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                                size: 26,
+                              ),
                             ),
                           ),
                         ],
@@ -173,17 +278,25 @@ class _MTGCardPage extends State<MTGCardPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 20),
-                            child: const Icon(
-                              Icons.add,
-                              color: Color.fromARGB(255, 250, 250, 250),
-                              size: 26,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  changeCardValues("add", "inUse", setCode,
+                                      cardCode, mtgData);
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.add,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                                size: 26,
+                              ),
                             ),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 20),
-                            child: const Text(
-                              "3",
-                              style: TextStyle(
+                            child: Text(
+                              getCardValue("inUse", setCode, cardCode, mtgData),
+                              style: const TextStyle(
                                 fontSize: 46,
                                 color: Color.fromARGB(255, 250, 250, 250),
                               ),
@@ -191,10 +304,18 @@ class _MTGCardPage extends State<MTGCardPage> {
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 20),
-                            child: const Icon(
-                              Icons.remove,
-                              color: Color.fromARGB(255, 250, 250, 250),
-                              size: 26,
+                            child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  changeCardValues("remove", "inUse", setCode,
+                                      cardCode, mtgData);
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.remove,
+                                color: Color.fromARGB(255, 250, 250, 250),
+                                size: 26,
+                              ),
                             ),
                           ),
                         ],
