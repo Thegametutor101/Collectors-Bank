@@ -15,7 +15,7 @@ class MTGHomePage extends StatefulWidget {
 }
 
 class _MTGHomePageState extends State<MTGHomePage> {
-  late List<MTGData> mtgData;
+  List<MTGData> mtgData = [];
 
   void loadMtgData() async {
     mtgData = await Constants.readMTGData();

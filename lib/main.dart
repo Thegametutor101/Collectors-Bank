@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:collectors_bank/mtg_home.dart';
-import 'package:collectors_bank/DB/constants.dart';
-import 'package:collectors_bank/DB/data/data_mtg.dart';
 
 void main(List<String> args) {
   runApp(const CollectorsBank());

@@ -24,13 +24,10 @@ class Constants {
     try {
       final file = await _localFile('MTGData.json');
       final contents = await file.readAsString();
-      print('contents:');
-      print(contents);
-      if (contents.isEmpty) return List.empty();
       final parser = JsonParserMTG(contents);
       return parser.parseInBackground();
     } catch (e) {
-      return List.empty();
+      return List.empty(growable: true);
     }
   }
 
@@ -61,9 +58,11 @@ class JsonParserMTG {
   }
 
   Future<void> _decodeAndParseJson(SendPort port) async {
+    if (encodedJson.isEmpty) Isolate.exit(port, List<MTGData>.empty());
     final jsonData = jsonDecode(encodedJson);
     final resultJson = jsonData as List<dynamic>;
-    final result = resultJson.map((json) => MTGData.fromJson(json)).toList();
+    final result =
+        resultJson.map((json) => MTGData.fromJson(json)).toList(growable: true);
     Isolate.exit(port, result);
   }
 }

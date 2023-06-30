@@ -43,8 +43,8 @@ class MTGData {
     return {
       'DataSet': {
         "setCode": dataSet.setCode,
-        "collected": dataSet.setCode,
-        "DataCard": [jsonEncode(dataSet.card)]
+        "collected": dataSet.collected,
+        "DataCard": _loopDataCardsToJson(dataSet.card)
       }
     };
   }
@@ -53,6 +53,15 @@ class MTGData {
       cardCode: checkIfNull(json[MTGDataCardFeilds.cardCode]),
       owned: checkIfNull(json[MTGDataCardFeilds.owned]),
       inUse: checkIfNull(json[MTGDataCardFeilds.inUse]));
+
+  static List<Map<String, dynamic>> _loopDataCardsToJson(
+      List<MTGDataCard> mtgDataCard) {
+    List<Map<String, dynamic>> list = List.empty(growable: true);
+    for (var card in mtgDataCard) {
+      list.add(card.toJson());
+    }
+    return list;
+  }
 
   static String checkIfNull(Object? item) {
     if (item == null) {

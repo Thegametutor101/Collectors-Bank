@@ -19,7 +19,7 @@ class MTGSetPage extends StatefulWidget {
 }
 
 class _MTGSetPage extends State<MTGSetPage> {
-  late List<MTGData> mtgData;
+  List<MTGData> mtgData = [];
 
   void loadMtgData() async {
     mtgData = await Constants.readMTGData();
