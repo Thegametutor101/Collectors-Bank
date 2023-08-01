@@ -44,14 +44,45 @@ class _MTGSetPage extends State<MTGSetPage> {
     }
   }
 
-  ImageProvider checkIfImage(String image) {
-    if (image == '') {
-      return const Image(
-              image: AssetImage('lib/assets/No_Image_Found_Template.png'))
-          .image;
+  Widget checkIfImage(MTGCard card) {
+    if (card.image == '') {
+      return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Flex(
+          direction: Axis.vertical,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text(
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 220, 220, 220),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                  card.number),
+            ),
+            Text(
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 220, 220, 220),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+                card.name),
+          ],
+        ),
+      );
     } else {
-      return Image.memory(Uri.parse(image).data?.contentAsBytes() as Uint8List)
-          .image;
+      return Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: Image.memory(
+                    Uri.parse(card.image).data?.contentAsBytes() as Uint8List)
+                .image,
+            fit: BoxFit.fitHeight,
+          ),
+        ),
+      );
     }
   }
 
@@ -63,7 +94,7 @@ class _MTGSetPage extends State<MTGSetPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(
-        title: Text('MTG - $setName'),
+        title: Text(setName),
         backgroundColor: const Color.fromARGB(255, 250, 10, 10),
       ),
       body: FutureBuilder<List<MTGCard>>(
@@ -130,14 +161,7 @@ class _MTGSetPage extends State<MTGSetPage> {
                         ),
                       );
                     },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: checkIfImage(cards[index].image),
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                    ),
+                    child: checkIfImage(cards[index]),
                   ),
                 );
               },

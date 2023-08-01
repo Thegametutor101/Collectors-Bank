@@ -7,7 +7,7 @@ class MTGSetFields {
 
   static const String name = 'Nname';
   static const String code = 'Ncode';
-  static const String date = 'Ndate';
+  static const String date = 'NdateValue';
   static const String is_promo = 'Nis_promo';
   static const String cardCount = 'cardCount';
 }
