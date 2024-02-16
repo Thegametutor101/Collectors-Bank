@@ -2,8 +2,6 @@ import 'package:collectors_bank/DB/constants.dart';
 import 'package:collectors_bank/DB/data/data_mtg.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:isolate';
 import 'package:collectors_bank/DB/models/mtg_set.dart';
 import 'package:collectors_bank/mtg_set_page.dart';
 
@@ -131,23 +129,5 @@ class _MTGHomePageState extends State<MTGHomePage> {
         },
       ),
     );
-  }
-}
-
-class JsonParserMTGSets {
-  JsonParserMTGSets(this.encodedJson);
-  final String encodedJson;
-
-  Future<List<MTGSet>> parseInBackground() async {
-    final p = ReceivePort();
-    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
-    return await p.first;
-  }
-
-  Future<void> _decodeAndParseJson(SendPort port) async {
-    final jsonData = jsonDecode(encodedJson);
-    final resultJson = jsonData as List<dynamic>;
-    final result = resultJson.map((json) => MTGSet.fromJson(json)).toList();
-    Isolate.exit(port, result);
   }
 }

@@ -1,13 +1,10 @@
-import 'dart:isolate';
-import 'package:collectors_bank/DB/constants.dart';
-import 'package:collectors_bank/DB/data/data_mtg.dart';
-import 'package:collectors_bank/mtgCardPage/mtg_card_page_display.dart';
-import 'package:collectors_bank/mtgCardPage/mtg_card_page_variants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+
+import 'package:collectors_bank/DB/constants.dart';
 import 'package:collectors_bank/DB/models/mtg_card.dart';
+import 'package:collectors_bank/mtgCardPage/mtg_card_page_display.dart';
+import 'package:collectors_bank/mtgCardPage/mtg_card_page_variants.dart';
 
 class MTGCardPage extends StatelessWidget {
   const MTGCardPage(
@@ -82,7 +79,7 @@ class MTGCardPage extends StatelessWidget {
             return PageView(
               children: [
                 MTGCardPageDisplay(card: card),
-                const MTGCardPageVariants()
+                MTGCardPageVariants(card: card)
               ],
             );
           }
@@ -92,23 +89,5 @@ class MTGCardPage extends StatelessWidget {
         },
       ),
     );
-  }
-}
-
-class JsonParserMTGCard {
-  JsonParserMTGCard(this.encodedJson);
-  final String encodedJson;
-
-  Future<MTGCard> parseInBackground() async {
-    final p = ReceivePort();
-    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
-    return await p.first;
-  }
-
-  Future<void> _decodeAndParseJson(SendPort port) async {
-    final jsonData = jsonDecode(encodedJson);
-    final resultJson = jsonData as List<dynamic>;
-    final result = resultJson.map((json) => MTGCard.fromJson(json));
-    Isolate.exit(port, result.first);
   }
 }

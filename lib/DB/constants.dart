@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:collectors_bank/DB/data/data_mtg.dart';
+import 'package:collectors_bank/DB/models/mtg_card.dart';
+import 'package:collectors_bank/DB/models/mtg_set.dart';
+import 'package:collectors_bank/DB/models/view_mtg_card_variants.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Constants {
@@ -58,11 +61,86 @@ class JsonParserMTG {
   }
 
   Future<void> _decodeAndParseJson(SendPort port) async {
-    if (encodedJson.isEmpty) Isolate.exit(port, List<MTGData>.empty());
+    if (encodedJson.isEmpty) {
+      Isolate.exit(port, List<MTGData>.empty(growable: true));
+    }
     final jsonData = jsonDecode(encodedJson);
     final resultJson = jsonData as List<dynamic>;
     final result =
         resultJson.map((json) => MTGData.fromJson(json)).toList(growable: true);
+    Isolate.exit(port, result);
+  }
+}
+
+class JsonParserMTGSets {
+  JsonParserMTGSets(this.encodedJson);
+  final String encodedJson;
+
+  Future<List<MTGSet>> parseInBackground() async {
+    final p = ReceivePort();
+    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
+    return await p.first;
+  }
+
+  Future<void> _decodeAndParseJson(SendPort port) async {
+    final jsonData = jsonDecode(encodedJson);
+    final resultJson = jsonData as List<dynamic>;
+    final result = resultJson.map((json) => MTGSet.fromJson(json)).toList();
+    Isolate.exit(port, result);
+  }
+}
+
+class JsonParserMTGCardToList {
+  JsonParserMTGCardToList(this.encodedJson);
+  final String encodedJson;
+
+  Future<List<MTGCard>> parseInBackground() async {
+    final p = ReceivePort();
+    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
+    return await p.first;
+  }
+
+  Future<void> _decodeAndParseJson(SendPort port) async {
+    final jsonData = jsonDecode(encodedJson);
+    final resultJson = jsonData as List<dynamic>;
+    final result = resultJson.map((json) => MTGCard.fromJson(json)).toList();
+    Isolate.exit(port, result);
+  }
+}
+
+class JsonParserMTGCard {
+  JsonParserMTGCard(this.encodedJson);
+  final String encodedJson;
+
+  Future<MTGCard> parseInBackground() async {
+    final p = ReceivePort();
+    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
+    return await p.first;
+  }
+
+  Future<void> _decodeAndParseJson(SendPort port) async {
+    final jsonData = jsonDecode(encodedJson);
+    final resultJson = jsonData as List<dynamic>;
+    final result = resultJson.map((json) => MTGCard.fromJson(json));
+    Isolate.exit(port, result.first);
+  }
+}
+
+class JsonParserViewMTGCardVariantsToList {
+  JsonParserViewMTGCardVariantsToList(this.encodedJson);
+  final String encodedJson;
+
+  Future<List<ViewMTGCardVariants>> parseInBackground() async {
+    final p = ReceivePort();
+    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
+    return await p.first;
+  }
+
+  Future<void> _decodeAndParseJson(SendPort port) async {
+    final jsonData = jsonDecode(encodedJson);
+    final resultJson = jsonData as List<dynamic>;
+    final result =
+        resultJson.map((json) => ViewMTGCardVariants.fromJson(json)).toList();
     Isolate.exit(port, result);
   }
 }

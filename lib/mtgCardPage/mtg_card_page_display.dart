@@ -1,11 +1,7 @@
-import 'dart:ffi';
-import 'dart:isolate';
 import 'package:collectors_bank/DB/constants.dart';
 import 'package:collectors_bank/DB/data/data_mtg.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:collectors_bank/DB/models/mtg_card.dart';
 
 class MTGCardPageDisplay extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:collectors_bank/DB/constants.dart';
 import 'package:collectors_bank/DB/data/data_mtg.dart';
-import 'package:collectors_bank/mtg_card_page.dart';
 import 'package:collectors_bank/DB/models/mtg_card.dart';
+import 'package:collectors_bank/mtgCardPage/mtg_card_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +37,7 @@ class _MTGSetPage extends State<MTGSetPage> {
     var result =
         await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
     if (result.statusCode == 200) {
-      final parser = JsonParserMTGCard(result.body);
+      final parser = JsonParserMTGCardToList(result.body);
       return parser.parseInBackground();
     } else {
       throw Exception('Failed to retreive Cards Json.');
