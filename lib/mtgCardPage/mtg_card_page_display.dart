@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:isolate';
 import 'package:collectors_bank/DB/constants.dart';
 import 'package:collectors_bank/DB/data/data_mtg.dart';
@@ -19,9 +20,9 @@ class MTGCardPageDisplay extends StatefulWidget {
 class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
   List<MTGData> mtgData = List.empty(growable: true);
 
-  void loadMtgData() async {
+  Future<bool> loadMtgData() async {
     mtgData = await Constants.readMTGData();
-    updateMTGData(mtgData);
+    return true;
   }
 
   void updateMTGData(List<MTGData> mtgData) {
@@ -31,14 +32,37 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
     });
   }
 
-  ImageProvider checkIfImage(String image) {
-    if (image == '') {
-      return const Image(
-              image: AssetImage('lib/assets/No_Image_Found_Template.png'))
-          .image;
+  Widget checkIfImage(MTGCard card) {
+    if (card.image == '') {
+      return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Flex(
+          direction: Axis.vertical,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Text(
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 220, 220, 220),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                  card.number),
+            ),
+            Text(
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 220, 220, 220),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+                card.name),
+          ],
+        ),
+      );
     } else {
-      return Image.memory(Uri.parse(image).data?.contentAsBytes() as Uint8List)
-          .image;
+      return Image.memory(
+          Uri.parse(card.image).data?.contentAsBytes() as Uint8List);
     }
   }
 
@@ -133,150 +157,176 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
   @override
   Widget build(BuildContext context) {
     MTGCard card = widget.card;
-    loadMtgData();
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 60, 60, 60),
-        body: Flex(
-          direction: Axis.vertical,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Card(
-              margin: const EdgeInsets.only(top: 20),
-              color: const Color.fromARGB(0, 0, 0, 0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Image(
-                image: checkIfImage(card.image),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      backgroundColor: const Color.fromARGB(255, 60, 60, 60),
+      body: FutureBuilder(
+        future: loadMtgData(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Flex(
+              direction: Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Card(
+                  margin: const EdgeInsets.only(top: 20),
+                  color: const Color.fromARGB(0, 0, 0, 0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: checkIfImage(card),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(15),
+                  child: Flex(
+                    direction: Axis.horizontal,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: const Text(
-                          "Owned",
-                          style: TextStyle(
-                            fontSize: 26,
-                            color: Color.fromARGB(255, 250, 250, 250),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flex(
+                            direction: Axis.horizontal,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                getCardValue(
+                                    "owned", card.set, card.id, mtgData),
+                                style: const TextStyle(
+                                  fontSize: 46,
+                                  color: Color.fromARGB(255, 250, 250, 250),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Flex(
+                                  direction: Axis.vertical,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          changeCardValues("add", "owned",
+                                              card.set, card.id, mtgData);
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color:
+                                            Color.fromARGB(255, 250, 250, 250),
+                                        size: 26,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          changeCardValues("remove", "owned",
+                                              card.set, card.id, mtgData);
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color:
+                                            Color.fromARGB(255, 250, 250, 250),
+                                        size: 26,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
+                          const Text(
+                            "Owned",
+                            style: TextStyle(
+                              fontSize: 26,
+                              color: Color.fromARGB(255, 250, 250, 250),
+                            ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              changeCardValues(
-                                  "add", "owned", card.set, card.id, mtgData);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.add,
-                            color: Color.fromARGB(255, 250, 250, 250),
-                            size: 26,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flex(
+                            direction: Axis.horizontal,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                getCardValue(
+                                    "inUse", card.set, card.id, mtgData),
+                                style: const TextStyle(
+                                  fontSize: 46,
+                                  color: Color.fromARGB(255, 250, 250, 250),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Flex(
+                                  direction: Axis.vertical,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          changeCardValues("add", "inUse",
+                                              card.set, card.id, mtgData);
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color:
+                                            Color.fromARGB(255, 250, 250, 250),
+                                        size: 26,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          changeCardValues("remove", "inUse",
+                                              card.set, card.id, mtgData);
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.remove,
+                                        color:
+                                            Color.fromARGB(255, 250, 250, 250),
+                                        size: 26,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: Text(
-                          getCardValue("owned", card.set, card.id, mtgData),
-                          style: const TextStyle(
-                            fontSize: 46,
-                            color: Color.fromARGB(255, 250, 250, 250),
+                          const Text(
+                            "In Use",
+                            style: TextStyle(
+                              fontSize: 26,
+                              color: Color.fromARGB(255, 250, 250, 250),
+                            ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              changeCardValues("remove", "owned", card.set,
-                                  card.id, mtgData);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Color.fromARGB(255, 250, 250, 250),
-                            size: 26,
-                          ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: const Text(
-                          "In Use",
-                          style: TextStyle(
-                            fontSize: 26,
-                            color: Color.fromARGB(255, 250, 250, 250),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              changeCardValues(
-                                  "add", "inUse", card.set, card.id, mtgData);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.add,
-                            color: Color.fromARGB(255, 250, 250, 250),
-                            size: 26,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: Text(
-                          getCardValue("inUse", card.set, card.id, mtgData),
-                          style: const TextStyle(
-                            fontSize: 46,
-                            color: Color.fromARGB(255, 250, 250, 250),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              changeCardValues("remove", "inUse", card.set,
-                                  card.id, mtgData);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Color.fromARGB(255, 250, 250, 250),
-                            size: 26,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ));
+                ),
+              ],
+            );
+          }
+          return Center(
+            child: Text('Error fetching the ${card.name} card.'),
+          );
+        },
+      ),
+    );
   }
 }

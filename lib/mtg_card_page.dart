@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:collectors_bank/DB/models/mtg_card.dart';
 
-class MTGCardPage extends StatefulWidget {
+class MTGCardPage extends StatelessWidget {
   const MTGCardPage(
       {super.key,
       required this.cardCode,
@@ -20,11 +20,6 @@ class MTGCardPage extends StatefulWidget {
   final String cardName;
   final String setCode;
 
-  @override
-  State<MTGCardPage> createState() => _MTGCardPage();
-}
-
-class _MTGCardPage extends State<MTGCardPage> {
   Future<MTGCard> getCard(cardCode) async {
     String url =
         "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getCard.php?cardCode=$cardCode";
@@ -40,9 +35,6 @@ class _MTGCardPage extends State<MTGCardPage> {
 
   @override
   Widget build(BuildContext context) {
-    String cardCode = widget.cardCode;
-    String cardName = widget.cardName;
-    String setCode = widget.setCode;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(
