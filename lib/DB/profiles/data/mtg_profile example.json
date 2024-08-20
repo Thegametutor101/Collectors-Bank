@@ -1,0 +1,29 @@
+[
+    {"DataSet":
+        {"setCode":"NEC",
+        "collected":"1",
+        "DataCard":[
+            {"cardCode":"SF-TNEC_9",
+            "owned":"2",
+            "inUse":"1"}]
+        }
+    },
+    {"DataSet":
+        {"setCode":"NEO",
+        "collected":"1",
+        "DataCard":[
+            {"cardCode":"SF-TNEO_5",
+            "owned":"1",
+            "inUse":"0"}]
+        }
+    },
+    {"DataSet":
+        {"setCode":"M15",
+        "collected":"1",
+        "DataCard":[
+            {"cardCode":"383425",
+            "owned":"3",
+            "inUse":"0"}]
+        }
+    }
+]

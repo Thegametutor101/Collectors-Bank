@@ -1,8 +1,8 @@
-import 'package:collectors_bank/DB/constants.dart';
-import 'package:collectors_bank/DB/data/data_mtg.dart';
+import 'package:collectors_bank/constants.dart';
+import 'package:collectors_bank/DB/profiles/mtg_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:collectors_bank/DB/models/mtg_card.dart';
+import 'package:collectors_bank/DB/models/mtg/mtg_card.dart';
 
 class MTGCardPageDisplay extends StatefulWidget {
   const MTGCardPageDisplay({super.key, required this.card});

@@ -1,25 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
-import 'package:collectors_bank/DB/data/data_mtg.dart';
-import 'package:collectors_bank/DB/models/mtg_card.dart';
-import 'package:collectors_bank/DB/models/mtg_set.dart';
-import 'package:collectors_bank/DB/models/view_mtg_card_variants.dart';
+import 'package:collectors_bank/DB/profiles/mtg_profile.dart';
+import 'package:collectors_bank/DB/models/mtg/mtg_card.dart';
+import 'package:collectors_bank/DB/models/mtg/mtg_set.dart';
+import 'package:collectors_bank/DB/models/mtg/view_mtg_card_variants.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Constants {
-  static Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
-  }
-
   static Future<File> _localFile(String name) async {
-    final path = await _localPath;
-    if (await File('$path/$name').exists()) {
-      return File('$path/$name');
+    final directory = await getApplicationDocumentsDirectory();
+    if (await File('${directory.path}/$name').exists()) {
+      return File('${directory.path}/$name');
     } else {
-      return File('$path/$name').create();
+      return File('${directory.path}/$name').create();
     }
   }
 

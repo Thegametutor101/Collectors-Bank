@@ -1,5 +1,6 @@
+import 'package:collectors_bank/preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:collectors_bank/mtg_home.dart';
+import 'package:collectors_bank/Pages/mtg/mtg_home.dart';
 
 void main(List<String> args) {
   runApp(const CollectorsBank());
@@ -23,13 +24,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 60, 60, 60),
+      backgroundColor: Preferences().appBackgroundColor,
       appBar: AppBar(
         title: const Text(
           'Collector\'s Bank',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color.fromARGB(255, 250, 10, 10),
+        backgroundColor: Preferences().appAccentColor,
       ),
       body: Container(
         width: double.infinity,
@@ -42,7 +43,7 @@ class HomePage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => const MTGHomePage(),
+                builder: (_) => MTGHome(),
               ),
             );
           },
