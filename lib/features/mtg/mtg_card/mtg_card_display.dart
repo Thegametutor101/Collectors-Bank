@@ -1,4 +1,4 @@
-import 'package:collectors_bank/constants.dart';
+import 'package:collectors_bank/utils/constants/constants.dart';
 import 'package:collectors_bank/DB/profiles/mtg_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

@@ -1,9 +1,9 @@
 import 'package:collectors_bank/DB/models/mtg/mtg_card.dart';
 import 'package:collectors_bank/DB/models/mtg/view_mtg_card_variants.dart';
-import 'package:collectors_bank/Pages/mtg/mtg_card/mtg_card.dart';
+import 'package:collectors_bank/features/mtg/mtg_card/mtg_card.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:collectors_bank/constants.dart';
+import 'package:collectors_bank/utils/constants/constants.dart';
 
 class MTGCardPageVariants extends StatefulWidget {
   const MTGCardPageVariants({super.key, required this.card});

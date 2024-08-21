@@ -1,9 +1,9 @@
-import 'package:collectors_bank/constants.dart';
+import 'package:collectors_bank/utils/constants/constants.dart';
 import 'package:collectors_bank/DB/profiles/mtg_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:collectors_bank/DB/models/mtg/mtg_set.dart';
-import 'package:collectors_bank/Pages/mtg/mtg_set.dart';
+import 'package:collectors_bank/features/mtg/mtg_set.dart';
 
 // ignore: must_be_immutable
 class MTGSets extends StatefulWidget {
