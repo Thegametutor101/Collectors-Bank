@@ -1,14 +1,14 @@
-import 'package:collectors_bank/utils/constants/constants.dart';
-import 'package:collectors_bank/DB/profiles/mtg_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:collectors_bank/DB/models/mtg/mtg_set.dart';
+import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
+import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
+import 'package:collectors_bank/bindings/models/mtg/model_set.dart';
 import 'package:collectors_bank/features/mtg/mtg_set.dart';
+import 'package:collectors_bank/utils/http/http_server_mtg.dart';
 
 // ignore: must_be_immutable
 class MTGSets extends StatefulWidget {
-  MTGSets({super.key, required List<MTGData> mtgData});
-  List<MTGData> mtgData = [];
+  MTGSets({super.key, required List<MtgProfile> mtgProfile});
+  List<MtgProfile> mtgProfile = [];
 
   @override
   State<MTGSets> createState() => _MTGSetsState();
@@ -16,32 +16,21 @@ class MTGSets extends StatefulWidget {
 
 class _MTGSetsState extends State<MTGSets> {
   void loadMtgData() async {
-    widget.mtgData = await Constants.readMTGData();
+    widget.mtgProfile = await CollectorsBankStorageMtg().readMTGData();
   }
 
-  void updateMTGData(List<MTGData> mtgData) {
+  void updateMTGData(List<MtgProfile> mtgProfile) {
     setState(() {
-      widget.mtgData = mtgData;
+      widget.mtgProfile = mtgProfile;
     });
   }
 
-  Future<List<MTGSet>> getSets() async {
-    String url =
-        "http://192.168.50.126/Collectors-Bank/php/collectors_bank_mtg/entities/mtg_getSets.php";
-    var result =
-        await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
-    if (result.statusCode == 200) {
-      final parser = JsonParserMTGSets(result.body);
-      return parser.parseInBackground();
-    } else {
-      throw Exception('Failed to retreive Cards Json.');
-    }
-  }
-
-  String getSetCollected(String setCode, List<MTGData> mtgData) {
+  String getSetCollected(String setCode, List<MtgProfile> mtgProfile) {
     String collected = '0';
-    for (var set in mtgData) {
-      if (set.dataSet.setCode == setCode) collected = set.dataSet.collected;
+    for (var set in mtgProfile) {
+      if (set.profileSet.setCode == setCode) {
+        collected = set.profileSet.collected;
+      }
     }
     return collected;
   }
@@ -49,8 +38,8 @@ class _MTGSetsState extends State<MTGSets> {
   @override
   Widget build(BuildContext context) {
     loadMtgData();
-    return FutureBuilder<List<MTGSet>>(
-      future: getSets(),
+    return FutureBuilder<List<ModelMtgSet>>(
+      future: CollectorsBankHttpServer.getMtgSets("mtg_getSets.php"),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.data == null ||
             snapshot.connectionState == ConnectionState.waiting) {
@@ -88,7 +77,7 @@ class _MTGSetsState extends State<MTGSets> {
           );
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          List<MTGSet> sets = snapshot.data;
+          List<ModelMtgSet> sets = snapshot.data;
           return ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
@@ -104,7 +93,7 @@ class _MTGSetsState extends State<MTGSets> {
                   children: [
                     Text(sets[index].code),
                     Text(
-                        "${getSetCollected(sets[index].code, widget.mtgData)}/${sets[index].cardCount}"),
+                        "${getSetCollected(sets[index].code, widget.mtgProfile)}/${sets[index].cardCount}"),
                   ],
                 ),
                 onTap: () {

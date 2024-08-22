@@ -13,7 +13,7 @@ class CollectorsBankTheme {
 
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    fontFamily: 'Untlang',
+    fontFamily: 'Roboto',
     brightness: Brightness.light,
     primaryColor: CollectorsBankColors.primaryColor,
     scaffoldBackgroundColor: CollectorsBankColors.scaffoldColor,
@@ -29,7 +29,7 @@ class CollectorsBankTheme {
   );
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
-    fontFamily: 'Untlang',
+    fontFamily: 'Roboto',
     brightness: Brightness.dark,
     primaryColor: CollectorsBankColors.primaryColor,
     scaffoldBackgroundColor: CollectorsBankColors.scaffoldColor,

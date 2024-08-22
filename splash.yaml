@@ -1,0 +1,13 @@
+flutter_native_splash:
+  color: "#272727"
+  color_dark: "#272727"
+  image: assets\images\vault_wheel_black.png
+  image_dark: assets\images\vault_wheel_black.png
+
+  android_12:
+    color: "#272727"
+    color_dark: "#272727"
+    image: assets\images\vault_wheel_black.png
+    image_dark: assets\images\vault_wheel_black.png
+
+  web: false

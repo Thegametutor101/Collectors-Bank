@@ -1,5 +1,7 @@
 import 'package:collectors_bank/features/mtg/mtg_home.dart';
+import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/image_strings.dart';
+import 'package:collectors_bank/utils/constants/variables.dart';
 import 'package:collectors_bank/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class CollectorsBank extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: CollectorsBankTheme.lightTheme,
       darkTheme: CollectorsBankTheme.darkTheme,
-      title: 'Collector\'s Bank',
+      title: CollectorsBankVariables.appName,
       home: const HomePage(),
     );
   }
@@ -25,10 +27,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Collector\'s Bank',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          CollectorsBankVariables.appName,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        backgroundColor: CollectorsBankColors.primaryColor,
       ),
       body: Container(
         width: double.infinity,

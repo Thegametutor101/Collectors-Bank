@@ -1,12 +1,10 @@
-import 'package:collectors_bank/utils/constants/constants.dart';
-import 'package:collectors_bank/DB/profiles/mtg_profile.dart';
-import 'package:collectors_bank/DB/models/mtg/mtg_card.dart';
+import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
+import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
+import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_card/mtg_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:isolate';
 
 class MTGSetPage extends StatefulWidget {
   const MTGSetPage({super.key, required this.setCode, required this.setName});
@@ -19,32 +17,28 @@ class MTGSetPage extends StatefulWidget {
 }
 
 class _MTGSetPage extends State<MTGSetPage> {
-  List<MTGData> mtgData = [];
+  List<MtgProfile> mtgData = [];
 
-  void loadMtgData() async {
-    mtgData = await Constants.readMTGData();
-  }
-
-  void updateMTGData(List<MTGData> mtgData) {
+  void updateMTGData(List<MtgProfile> mtgData) {
     setState(() {
       this.mtgData = mtgData;
     });
   }
 
-  Future<List<MTGCard>> getCards(setCode) async {
+  Future<List<ModelMtgCard>> getCards(setCode) async {
     String url =
         "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getCards.php?setCode=$setCode";
     var result =
         await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
     if (result.statusCode == 200) {
-      final parser = JsonParserMTGCardToList(result.body);
-      return parser.parseInBackground();
+      final parser = JsonParserMTGCard(result.body, true);
+      return parser.parseInBackgroundToList();
     } else {
       throw Exception('Failed to retreive Cards Json.');
     }
   }
 
-  Widget checkIfImage(MTGCard card) {
+  Widget checkIfImage(ModelMtgCard card) {
     if (card.image == '') {
       return Container(
         alignment: Alignment.center,
@@ -90,14 +84,14 @@ class _MTGSetPage extends State<MTGSetPage> {
   Widget build(BuildContext context) {
     String setCode = widget.setCode;
     String setName = widget.setName;
-    loadMtgData();
+    //loadMtgData();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       appBar: AppBar(
         title: Text(setName),
         backgroundColor: const Color.fromARGB(255, 250, 10, 10),
       ),
-      body: FutureBuilder<List<MTGCard>>(
+      body: FutureBuilder<List<ModelMtgCard>>(
         future: getCards(setCode),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||
@@ -134,7 +128,7 @@ class _MTGSetPage extends State<MTGSetPage> {
             );
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            List<MTGCard> cards = snapshot.data;
+            List<ModelMtgCard> cards = snapshot.data;
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
@@ -173,23 +167,5 @@ class _MTGSetPage extends State<MTGSetPage> {
         },
       ),
     );
-  }
-}
-
-class JsonParserMTGCard {
-  JsonParserMTGCard(this.encodedJson);
-  final String encodedJson;
-
-  Future<List<MTGCard>> parseInBackground() async {
-    final p = ReceivePort();
-    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
-    return await p.first;
-  }
-
-  Future<void> _decodeAndParseJson(SendPort port) async {
-    final jsonData = jsonDecode(encodedJson);
-    final resultJson = jsonData as List<dynamic>;
-    final result = resultJson.map((json) => MTGCard.fromJson(json)).toList();
-    Isolate.exit(port, result);
   }
 }

@@ -1,34 +1,34 @@
-import 'package:collectors_bank/utils/constants/constants.dart';
-import 'package:collectors_bank/DB/profiles/mtg_profile.dart';
+import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
+import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:collectors_bank/DB/models/mtg/mtg_card.dart';
+import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
 
 class MTGCardPageDisplay extends StatefulWidget {
   const MTGCardPageDisplay({super.key, required this.card});
 
-  final MTGCard card;
+  final ModelMtgCard card;
 
   @override
   State<MTGCardPageDisplay> createState() => _MTGCardPageDisplay();
 }
 
 class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
-  List<MTGData> mtgData = List.empty(growable: true);
+  List<MtgProfile> mtgData = List.empty(growable: true);
 
   Future<bool> loadMtgData() async {
-    mtgData = await Constants.readMTGData();
+    //mtgData = await Constants.readMTGData();
     return true;
   }
 
-  void updateMTGData(List<MTGData> mtgData) {
-    this.mtgData = mtgData;
-    setState(() {
-      Constants.writeMTGData(mtgData);
-    });
-  }
+  // void updateMTGData(List<MTGData> mtgData) {
+  //   this.mtgData = mtgData;
+  //   setState(() {
+  //     Constants.writeMTGData(mtgData);
+  //   });
+  // }
 
-  Widget checkIfImage(MTGCard card) {
+  Widget checkIfImage(ModelMtgCard card) {
     if (card.image == '') {
       return Container(
         alignment: Alignment.center,
@@ -63,14 +63,14 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
   }
 
   String getCardValue(
-      String feild, String setCode, String cardCode, List<MTGData> mtgData) {
+      String feild, String setCode, String cardCode, List<MtgProfile> mtgData) {
     String value = '0';
     for (var set in mtgData) {
-      if (set.dataSet.setCode == setCode) {
-        for (var card in set.dataSet.card) {
+      if (set.profileSet.setCode == setCode) {
+        for (var card in set.profileSet.cards) {
           if (card.cardCode == cardCode) {
             if (feild == "owned") value = card.owned;
-            if (feild == "inUse") value = card.inUse;
+            if (feild == "inUse") value = card.inDecks;
           }
         }
       }
@@ -79,71 +79,72 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
   }
 
   void changeCardValues(String method, String feild, String setCode,
-      String cardCode, List<MTGData> mtgData) {
-    List<MTGData> mtgDataGrowable = checkIfExists(setCode, cardCode, mtgData);
+      String cardCode, List<MtgProfile> mtgData) {
+    List<MtgProfile> mtgDataGrowable =
+        checkIfExists(setCode, cardCode, mtgData);
     for (var set in mtgDataGrowable) {
-      if (set.dataSet.setCode == setCode) {
-        for (var card in set.dataSet.card) {
+      if (set.profileSet.setCode == setCode) {
+        for (var card in set.profileSet.cards) {
           if (card.cardCode == cardCode) {
             int cardOwned = int.parse(card.owned);
-            int cardInUse = int.parse(card.inUse);
-            int setCollected = int.parse(set.dataSet.collected);
+            int cardInUse = int.parse(card.inDecks);
+            int setCollected = int.parse(set.profileSet.collected);
             if (method == "add") {
               if (feild == "owned") {
                 if (cardOwned == 0) ++setCollected;
                 card.owned = (++cardOwned).toString();
               } else if (feild == "inUse") {
-                card.inUse = (++cardInUse).toString();
+                card.inDecks = (++cardInUse).toString();
                 if (cardOwned < cardInUse) {
-                  card.inUse = (--cardInUse).toString();
+                  card.inDecks = (--cardInUse).toString();
                 }
               }
-              set.dataSet.collected = setCollected.toString();
+              set.profileSet.collected = setCollected.toString();
             } else if (method == "remove") {
               if (feild == "owned") {
                 card.owned = (--cardOwned).toString();
                 if (cardOwned == 0) --setCollected;
                 if (cardOwned < 0) card.owned = "0";
                 if (cardOwned < cardInUse) {
-                  card.inUse = cardOwned.toString();
+                  card.inDecks = cardOwned.toString();
                 }
               } else if (feild == "inUse") {
-                card.inUse = (--cardInUse).toString();
-                if (cardInUse < 0) card.inUse = "0";
+                card.inDecks = (--cardInUse).toString();
+                if (cardInUse < 0) card.inDecks = "0";
               }
-              set.dataSet.collected = setCollected.toString();
+              set.profileSet.collected = setCollected.toString();
             }
           }
         }
       }
     }
-    updateMTGData(mtgDataGrowable);
+    //updateMTGData(mtgDataGrowable);
   }
 
-  List<MTGData> checkIfExists(
-      String setCode, String cardCode, List<MTGData> mtgData) {
+  List<MtgProfile> checkIfExists(
+      String setCode, String cardCode, List<MtgProfile> mtgData) {
     bool setExists = false;
     bool cardExists = false;
-    List<MTGData> mtgDataGrowable = mtgData.toList(growable: true);
+    List<MtgProfile> mtgDataGrowable = mtgData.toList(growable: true);
     for (var set in mtgData) {
-      if (set.dataSet.setCode == setCode) {
+      if (set.profileSet.setCode == setCode) {
         setExists = true;
-        for (var card in set.dataSet.card) {
+        for (var card in set.profileSet.cards) {
           if (card.cardCode == cardCode) cardExists = true;
         }
       }
     }
     if (!setExists) {
-      List<MTGDataCard> mtgDataCardEmpty = List.empty(growable: true);
-      mtgDataGrowable.add(MTGData(
-          dataSet: MTGDataSet(
-              setCode: setCode, collected: "0", card: mtgDataCardEmpty)));
+      List<MtgProfileCard> mtgDataCardEmpty = List.empty(growable: true);
+      mtgDataGrowable.add(MtgProfile(
+          profileSet: MtgProfileSet(
+              setCode: setCode, collected: "0", cards: mtgDataCardEmpty)));
     }
     if (!cardExists) {
       for (var set in mtgDataGrowable) {
-        if (set.dataSet.setCode == setCode) {
-          set.dataSet.card
-              .add(MTGDataCard(cardCode: cardCode, owned: "0", inUse: "0"));
+        if (set.profileSet.setCode == setCode) {
+          set.profileSet.cards.add(
+              MtgProfileCard(cardCode: cardCode, owned: "0", inDecks: "0"));
         }
       }
     }
@@ -152,7 +153,7 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    MTGCard card = widget.card;
+    ModelMtgCard card = widget.card;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 60, 60, 60),
       body: FutureBuilder(

@@ -1,7 +1,7 @@
-import 'package:collectors_bank/DB/profiles/mtg_profile.dart';
+import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:collectors_bank/features/mtg/mtg_sets.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
-import 'package:collectors_bank/utils/constants/constants.dart';
+import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -10,10 +10,10 @@ import 'package:iconsax/iconsax.dart';
 class MTGHome extends StatelessWidget {
   MTGHome({super.key});
 
-  List<MTGData> mtgData = [];
+  List<MtgProfile> mtgProfile = [];
 
   void loadMtgData() async {
-    mtgData = await Constants.readMTGData();
+    mtgProfile = await CollectorsBankStorageMtg().readMTGData();
   }
 
   @override
@@ -40,6 +40,8 @@ class MTGHome extends StatelessWidget {
       bottomNavigationBar: Obx(
         () => NavigationBarTheme(
           data: NavigationBarThemeData(
+            indicatorColor: CollectorsBankColors.primaryColor,
+            backgroundColor: CollectorsBankColors.scaffoldColor,
             labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(
               (Set<MaterialState> states) =>
                   states.contains(MaterialState.selected)
@@ -89,7 +91,7 @@ class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 
   final screens = [
-    MTGSets(mtgData: MTGHome().mtgData),
+    MTGSets(mtgProfile: MTGHome().mtgProfile),
     Container(color: Colors.blue),
     Container(color: Colors.deepPurple),
     Container(color: Colors.amber)

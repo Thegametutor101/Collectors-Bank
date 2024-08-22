@@ -1,6 +1,8 @@
+import 'package:collectors_bank/utils/helpers/helper_functions.dart';
+
 const String tableCards = 'cards';
 
-class MTGCardFields {
+class ModelMtgCardFields {
   static final List<String> values = [
     id,
     name,
@@ -62,7 +64,7 @@ class MTGCardFields {
   static const String image = 'image';
 }
 
-class MTGCard {
+class ModelMtgCard {
   final String id;
   final String name;
   final String set;
@@ -92,7 +94,7 @@ class MTGCard {
   final String color_identity;
   final String image;
 
-  MTGCard(
+  ModelMtgCard(
       {required this.id,
       required this.name,
       required this.set,
@@ -122,41 +124,41 @@ class MTGCard {
       required this.color_identity,
       required this.image});
 
-  static MTGCard fromJson(Map<String, Object?> json) => MTGCard(
-      id: json[MTGCardFields.id] as String,
-      name: json[MTGCardFields.name] as String,
-      set: json[MTGCardFields.set] as String,
-      type: json[MTGCardFields.type] as String,
-      rarity: json[MTGCardFields.rarity] as String,
-      manacost: checkIfNull(json[MTGCardFields.manacost]),
-      converted_manacost: checkIfNull(json[MTGCardFields.converted_manacost]),
-      power: checkIfNull(json[MTGCardFields.power]),
-      toughness: checkIfNull(json[MTGCardFields.toughness]),
-      loyalty: checkIfNull(json[MTGCardFields.loyalty]),
-      ability: checkIfNull(json[MTGCardFields.ability]),
-      flavor: checkIfNull(json[MTGCardFields.flavor]),
-      variation: checkIfNull(json[MTGCardFields.variation]),
-      artist: checkIfNull(json[MTGCardFields.artist]),
-      number: checkIfNull(json[MTGCardFields.number]),
-      rating: checkIfNull(json[MTGCardFields.rating]),
-      ruling: checkIfNull(json[MTGCardFields.ruling]),
-      color: checkIfNull(json[MTGCardFields.color]),
-      generated_mana: checkIfNull(json[MTGCardFields.generated_mana]),
-      pricing_EUR: checkIfNull(json[MTGCardFields.pricing_EUR]),
-      pricing_USD: checkIfNull(json[MTGCardFields.pricing_USD]),
-      pricing_TIX: checkIfNull(json[MTGCardFields.pricing_TIX]),
-      back_id: checkIfNull(json[MTGCardFields.back_id]),
-      watermark: checkIfNull(json[MTGCardFields.watermark]),
-      print_number: checkIfNull(json[MTGCardFields.print_number]),
-      is_original: checkIfNull(json[MTGCardFields.is_original]),
-      color_identity: checkIfNull(json[MTGCardFields.color_identity]),
-      image: checkIfNull(json[MTGCardFields.image]));
-
-  static String checkIfNull(Object? item) {
-    if (item == null) {
-      return '';
-    } else {
-      return item as String;
-    }
-  }
+  static ModelMtgCard fromJson(Map<String, Object?> json) => ModelMtgCard(
+      id: json[ModelMtgCardFields.id] as String,
+      name: json[ModelMtgCardFields.name] as String,
+      set: json[ModelMtgCardFields.set] as String,
+      type: json[ModelMtgCardFields.type] as String,
+      rarity: json[ModelMtgCardFields.rarity] as String,
+      manacost: CollectorsBankHelperFunctions.checkIfStringNull(
+          json[ModelMtgCardFields.manacost]),
+      converted_manacost: CollectorsBankHelperFunctions.checkIfStringNull(
+          json[ModelMtgCardFields.converted_manacost]),
+      power: CollectorsBankHelperFunctions.checkIfStringNull(
+          json[ModelMtgCardFields.power]),
+      toughness: CollectorsBankHelperFunctions.checkIfStringNull(
+          json[ModelMtgCardFields.toughness]),
+      loyalty: CollectorsBankHelperFunctions.checkIfStringNull(
+          json[ModelMtgCardFields.loyalty]),
+      ability: CollectorsBankHelperFunctions.checkIfStringNull(
+          json[ModelMtgCardFields.ability]),
+      flavor: CollectorsBankHelperFunctions.checkIfStringNull(
+          json[ModelMtgCardFields.flavor]),
+      variation: CollectorsBankHelperFunctions.checkIfStringNull(
+          json[ModelMtgCardFields.variation]),
+      artist: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.artist]),
+      number: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.number]),
+      rating: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.rating]),
+      ruling: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.ruling]),
+      color: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.color]),
+      generated_mana: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.generated_mana]),
+      pricing_EUR: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.pricing_EUR]),
+      pricing_USD: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.pricing_USD]),
+      pricing_TIX: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.pricing_TIX]),
+      back_id: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.back_id]),
+      watermark: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.watermark]),
+      print_number: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.print_number]),
+      is_original: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.is_original]),
+      color_identity: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.color_identity]),
+      image: CollectorsBankHelperFunctions.checkIfStringNull(json[ModelMtgCardFields.image]));
 }

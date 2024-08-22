@@ -1,11 +1,11 @@
 [
-    {"DataSet":
+    {"ProfileSets":
         {"setCode":"NEC",
         "collected":"1",
-        "DataCard":[
+        "ProfileCards":[
             {"cardCode":"SF-TNEC_9",
             "owned":"2",
-            "inUse":"1"}]
+            "inDeck":"1"}]
         }
     },
     {"DataSet":

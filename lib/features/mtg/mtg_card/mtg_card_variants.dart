@@ -1,21 +1,21 @@
-import 'package:collectors_bank/DB/models/mtg/mtg_card.dart';
-import 'package:collectors_bank/DB/models/mtg/view_mtg_card_variants.dart';
+import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
+import 'package:collectors_bank/bindings/models/mtg/view_mtg_card_variants.dart';
 import 'package:collectors_bank/features/mtg/mtg_card/mtg_card.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:collectors_bank/utils/constants/constants.dart';
+import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 
 class MTGCardPageVariants extends StatefulWidget {
   const MTGCardPageVariants({super.key, required this.card});
 
-  final MTGCard card;
+  final ModelMtgCard card;
 
   @override
   State<MTGCardPageVariants> createState() => _MTGCardPageVariants();
 }
 
 class _MTGCardPageVariants extends State<MTGCardPageVariants> {
-  Future<List<ViewMTGCardVariants>> getVariants(MTGCard card) async {
+  Future<List<ViewMTGCardVariants>> getVariants(ModelMtgCard card) async {
     String url =
         "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getVariants.php?cardName=${card.name}";
     var result =
@@ -30,7 +30,7 @@ class _MTGCardPageVariants extends State<MTGCardPageVariants> {
 
   @override
   Widget build(BuildContext context) {
-    final MTGCard currentCard = widget.card;
+    final ModelMtgCard currentCard = widget.card;
     return FutureBuilder<List<ViewMTGCardVariants>>(
       future: getVariants(currentCard),
       builder: (BuildContext context, AsyncSnapshot snapshot) {

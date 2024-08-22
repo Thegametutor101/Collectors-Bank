@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:collectors_bank/utils/constants/constants.dart';
-import 'package:collectors_bank/DB/models/mtg/mtg_card.dart';
+import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
+import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_card/mtg_card_display.dart';
 import 'package:collectors_bank/features/mtg/mtg_card/mtg_card_variants.dart';
 
@@ -17,13 +16,13 @@ class MTGCardPage extends StatelessWidget {
   final String cardName;
   final String setCode;
 
-  Future<MTGCard> getCard(cardCode) async {
+  Future<ModelMtgCard> getCard(cardCode) async {
     String url =
         "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getCard.php?cardCode=$cardCode";
     var result =
         await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
     if (result.statusCode == 200) {
-      final parser = JsonParserMTGCard(result.body);
+      final parser = JsonParserMTGCard(result.body, false);
       return parser.parseInBackground();
     } else {
       throw Exception('Failed to retreive Card Json.');
@@ -38,7 +37,7 @@ class MTGCardPage extends StatelessWidget {
         title: Text('$setCode - $cardName'),
         backgroundColor: const Color.fromARGB(255, 250, 10, 10),
       ),
-      body: FutureBuilder<MTGCard>(
+      body: FutureBuilder<ModelMtgCard>(
         future: getCard(cardCode),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||
@@ -75,7 +74,7 @@ class MTGCardPage extends StatelessWidget {
             );
           }
           if (snapshot.connectionState == ConnectionState.done) {
-            MTGCard card = snapshot.data;
+            ModelMtgCard card = snapshot.data;
             return PageView(
               children: [
                 MTGCardPageDisplay(card: card),
