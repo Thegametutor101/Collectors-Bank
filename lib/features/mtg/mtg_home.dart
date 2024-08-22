@@ -28,15 +28,7 @@ class MTGHome extends StatelessWidget {
         ),
         backgroundColor: CollectorsBankColors.primaryColor,
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 30,
-            color: Colors.yellow,
-          ),
-          controller.screens[controller.selectedIndex.value],
-        ],
-      ),
+      body: controller.screens[controller.selectedIndex.value],
       bottomNavigationBar: Obx(
         () => NavigationBarTheme(
           data: NavigationBarThemeData(
@@ -70,7 +62,7 @@ class MTGHome extends StatelessWidget {
                     label: "Collection"),
                 NavigationDestination(
                     icon: Icon(
-                      Iconsax.direct_normal,
+                      Iconsax.note,
                       color: Colors.white,
                     ),
                     label: "Decks"),

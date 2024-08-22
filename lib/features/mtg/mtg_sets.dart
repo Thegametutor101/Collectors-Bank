@@ -1,3 +1,4 @@
+import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
@@ -39,7 +40,7 @@ class _MTGSetsState extends State<MTGSets> {
   Widget build(BuildContext context) {
     loadMtgData();
     return FutureBuilder<List<ModelMtgSet>>(
-      future: CollectorsBankHttpServer.getMtgSets("mtg_getSets.php"),
+      future: CollectorsBankHttpServer.getMtgSets(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.data == null ||
             snapshot.connectionState == ConnectionState.waiting) {
@@ -77,7 +78,16 @@ class _MTGSetsState extends State<MTGSets> {
           );
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          List<ModelMtgSet> sets = snapshot.data;
+          List<ModelMtgSet> sets = [];
+          List<ModelMtgSet> setData = snapshot.data;
+          for (var set in setData) {
+            if (set.set_type == 'core' ||
+                set.set_type == 'expansion' ||
+                set.set_type == 'masters' ||
+                set.set_type == 'draft_innovation') {
+              sets.add(set);
+            }
+          }
           return ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
@@ -91,9 +101,13 @@ class _MTGSetsState extends State<MTGSets> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(sets[index].code),
                     Text(
-                        "${getSetCollected(sets[index].code, widget.mtgProfile)}/${sets[index].cardCount}"),
+                      sets[index].code,
+                      style: const TextStyle().copyWith(
+                          color: CollectorsBankColors.textSecondaryColor),
+                    ),
+                    Text(
+                        "${getSetCollected(sets[index].code, widget.mtgProfile)}/${sets[index].card_count}"),
                   ],
                 ),
                 onTap: () {

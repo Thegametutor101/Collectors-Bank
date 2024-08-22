@@ -1,7 +1,5 @@
 import 'package:collectors_bank/utils/helpers/helper_functions.dart';
 
-const String tableCards = 'cards';
-
 class ModelMtgCardFields {
   static final List<String> values = [
     id,

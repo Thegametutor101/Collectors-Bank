@@ -1,0 +1,20 @@
+dev_dependencies:
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/collectors_bank_logo.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/images/collectors_bank_logo.png"
+    backgroundColor: "#272727"
+    theme_color: "#3C7189"
+  windows:
+    generate: true
+    image_path: "assets/images/collectors_bank_logo.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/collectors_bank_logo.png"

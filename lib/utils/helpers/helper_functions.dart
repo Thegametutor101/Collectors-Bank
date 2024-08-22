@@ -56,4 +56,12 @@ class CollectorsBankHelperFunctions {
       return item as String;
     }
   }
+
+  static int checkIfIntNull(Object? item) {
+    if (item == null) {
+      return 0;
+    } else {
+      return item as int;
+    }
+  }
 }

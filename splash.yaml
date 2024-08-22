@@ -1,13 +1,11 @@
 flutter_native_splash:
-  color: "#272727"
+  color: "#FFFFFF"
   color_dark: "#272727"
-  image: assets\images\vault_wheel_black.png
-  image_dark: assets\images\vault_wheel_black.png
+  image: assets\images\collectors_bank_logo.png
 
   android_12:
-    color: "#272727"
+    color: "#FFFFFF"
     color_dark: "#272727"
-    image: assets\images\vault_wheel_black.png
-    image_dark: assets\images\vault_wheel_black.png
+    image: assets\images\collectors_bank_logo.png
 
   web: false

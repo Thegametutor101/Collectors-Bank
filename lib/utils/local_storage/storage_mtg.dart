@@ -17,15 +17,15 @@ class CollectorsBankStorageMtg {
 
   CollectorsBankStorageMtg._internal();
 
-  Future<List<MtgProfile>> _storage =
-      List.empty(growable: true) as Future<List<MtgProfile>>;
+  List<MtgProfile> _storage = List.empty(growable: true);
 
   Future<List<MtgProfile>> readMTGData() async {
     try {
       final file =
           await CollectorsBankHelperFunctions.localFile('MTGData.json');
       final contents = await file.readAsString();
-      _storage = JsonParserMtgProfile(contents).parseInBackground();
+      _storage = JsonParserMtgProfile(contents).parseInBackground()
+          as List<MtgProfile>;
       return _storage;
     } catch (e) {
       return _storage;
@@ -62,25 +62,6 @@ class JsonParserMtgProfile {
     final result = resultJson
         .map((json) => MtgProfile.fromJson(json))
         .toList(growable: true);
-    Isolate.exit(port, result);
-  }
-}
-
-class JsonParserMTGSets {
-  JsonParserMTGSets(this.encodedJson);
-  final String encodedJson;
-
-  Future<List<ModelMtgSet>> parseInBackground() async {
-    final p = ReceivePort();
-    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
-    return await p.first;
-  }
-
-  Future<void> _decodeAndParseJson(SendPort port) async {
-    final jsonData = jsonDecode(encodedJson);
-    final resultJson = jsonData as List<dynamic>;
-    final result =
-        resultJson.map((json) => ModelMtgSet.fromJson(json)).toList();
     Isolate.exit(port, result);
   }
 }
