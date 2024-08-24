@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -57,11 +58,49 @@ class CollectorsBankHelperFunctions {
     }
   }
 
+  static bool checkIfBoolNull(Object? item) {
+    if (item == null) {
+      return false;
+    } else {
+      return item as bool;
+    }
+  }
+
   static int checkIfIntNull(Object? item) {
     if (item == null) {
       return 0;
     } else {
       return item as int;
     }
+  }
+
+  static double checkIfDoubleNull(Object? item) {
+    if (item == null) {
+      return 0;
+    } else {
+      return item as double;
+    }
+  }
+
+  static List<String> addListString(List list) {
+    List<String> item = List.empty();
+    if (list.isEmpty) {
+      return item;
+    }
+    for (var i in list) {
+      item.add(checkIfStringNull(i));
+    }
+    return item;
+  }
+
+  static List<int> addListInt(List list) {
+    List<int> item = List.empty();
+    if (list.isEmpty) {
+      return item;
+    }
+    for (var i in list) {
+      item.add(checkIfIntNull(i));
+    }
+    return item;
   }
 }

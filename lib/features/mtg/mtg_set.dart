@@ -1,14 +1,19 @@
-import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
+import 'package:collectors_bank/utils/http/http_server_mtg.dart';
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_card/mtg_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class MTGSetPage extends StatefulWidget {
-  const MTGSetPage({super.key, required this.setCode, required this.setName});
+  MTGSetPage(
+      {super.key,
+      required this.mtgProfile,
+      required this.setCode,
+      required this.setName});
 
+  List<MtgProfile> mtgProfile = [];
   final String setCode;
   final String setName;
 
@@ -23,19 +28,6 @@ class _MTGSetPage extends State<MTGSetPage> {
     setState(() {
       this.mtgData = mtgData;
     });
-  }
-
-  Future<List<ModelMtgCard>> getCards(setCode) async {
-    String url =
-        "https://collectorsvault.000webhostapp.com/collectors_bank/collectors_bank_mtg/entities/mtg_getCards.php?setCode=$setCode";
-    var result =
-        await http.get(Uri.parse(url), headers: {'Accept': 'application/json'});
-    if (result.statusCode == 200) {
-      final parser = JsonParserMTGCard(result.body, true);
-      return parser.parseInBackgroundToList();
-    } else {
-      throw Exception('Failed to retreive Cards Json.');
-    }
   }
 
   Widget checkIfImage(ModelMtgCard card) {
@@ -92,7 +84,8 @@ class _MTGSetPage extends State<MTGSetPage> {
         backgroundColor: const Color.fromARGB(255, 250, 10, 10),
       ),
       body: FutureBuilder<List<ModelMtgCard>>(
-        future: getCards(setCode),
+        future: CollectorsBankHttpServer.getMtgCards(
+            setCode, "order=set&include_extras=true&q=s%3A$setCode"),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||
               snapshot.connectionState == ConnectionState.waiting) {

@@ -16,13 +16,9 @@ class MTGSets extends StatefulWidget {
 }
 
 class _MTGSetsState extends State<MTGSets> {
-  void loadMtgData() async {
-    widget.mtgProfile = await CollectorsBankStorageMtg().readMTGData();
-  }
-
   void updateMTGData(List<MtgProfile> mtgProfile) {
     setState(() {
-      widget.mtgProfile = mtgProfile;
+      CollectorsBankStorageMtg().writeMTGData();
     });
   }
 
@@ -38,7 +34,6 @@ class _MTGSetsState extends State<MTGSets> {
 
   @override
   Widget build(BuildContext context) {
-    loadMtgData();
     return FutureBuilder<List<ModelMtgSet>>(
       future: CollectorsBankHttpServer.getMtgSets(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -102,7 +97,7 @@ class _MTGSetsState extends State<MTGSets> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      sets[index].code,
+                      sets[index].code.toUpperCase(),
                       style: const TextStyle().copyWith(
                           color: CollectorsBankColors.textSecondaryColor),
                     ),
@@ -115,7 +110,9 @@ class _MTGSetsState extends State<MTGSets> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => MTGSetPage(
-                          setCode: sets[index].code, setName: sets[index].name),
+                          mtgProfile: widget.mtgProfile,
+                          setCode: sets[index].code,
+                          setName: sets[index].name),
                     ),
                   );
                 },
