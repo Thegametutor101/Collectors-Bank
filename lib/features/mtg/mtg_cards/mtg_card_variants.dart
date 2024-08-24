@@ -1,6 +1,6 @@
 import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
 import 'package:collectors_bank/bindings/models/mtg/view_mtg_card_variants.dart';
-import 'package:collectors_bank/features/mtg/mtg_card/mtg_card.dart';
+import 'package:collectors_bank/features/mtg/mtg_cards/mtg_card.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';

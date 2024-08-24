@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:isolate';
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
-import 'package:collectors_bank/bindings/models/mtg/model_set.dart';
 import 'package:collectors_bank/bindings/models/mtg/view_mtg_card_variants.dart';
 import 'package:collectors_bank/utils/helpers/helper_functions.dart';
 

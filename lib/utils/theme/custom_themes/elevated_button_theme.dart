@@ -11,7 +11,7 @@ class CollectorsBankElevatedButtonTheme {
         backgroundColor: CollectorsBankColors.primaryColor,
         disabledForegroundColor: Colors.grey,
         disabledBackgroundColor: Colors.grey,
-        side: BorderSide(color: CollectorsBankColors.primaryColor),
+        side: const BorderSide(color: CollectorsBankColors.primaryColor),
         padding: const EdgeInsets.symmetric(vertical: 18),
         textStyle: const TextStyle(
             fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
@@ -24,7 +24,7 @@ class CollectorsBankElevatedButtonTheme {
         backgroundColor: CollectorsBankColors.primaryColor,
         disabledForegroundColor: Colors.grey,
         disabledBackgroundColor: Colors.grey,
-        side: BorderSide(color: CollectorsBankColors.primaryColor),
+        side: const BorderSide(color: CollectorsBankColors.primaryColor),
         padding: const EdgeInsets.symmetric(vertical: 18),
         textStyle: const TextStyle(
             fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),

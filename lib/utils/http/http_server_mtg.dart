@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:collectors_bank/bindings/models/mtg/model_rulings.dart';
-import 'package:collectors_bank/utils/helpers/helper_functions.dart';
 import 'package:http/http.dart' as http;
 import 'package:collectors_bank/utils/constants/api_constants.dart';
 import 'package:collectors_bank/bindings/models/mtg/model_card.dart';

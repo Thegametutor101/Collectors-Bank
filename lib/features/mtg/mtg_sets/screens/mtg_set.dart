@@ -1,7 +1,7 @@
 import 'package:collectors_bank/utils/http/http_server_mtg.dart';
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
-import 'package:collectors_bank/features/mtg/mtg_card/mtg_card.dart';
+import 'package:collectors_bank/features/mtg/mtg_cards/mtg_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,7 @@ class _MTGSetPage extends State<MTGSetPage> {
   }
 
   Widget checkIfImage(ModelMtgCard card) {
-    if (card.image == '') {
+    if (card.image_uris.normal == '') {
       return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -47,7 +47,7 @@ class _MTGSetPage extends State<MTGSetPage> {
                       color: Color.fromARGB(255, 220, 220, 220),
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
-                  card.number),
+                  card.collector_number),
             ),
             Text(
                 style: const TextStyle(
@@ -62,8 +62,9 @@ class _MTGSetPage extends State<MTGSetPage> {
       return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: Image.memory(
-                    Uri.parse(card.image).data?.contentAsBytes() as Uint8List)
+            image: Image.memory(Uri.parse(card.image_uris.normal)
+                    .data
+                    ?.contentAsBytes() as Uint8List)
                 .image,
             fit: BoxFit.fitHeight,
           ),

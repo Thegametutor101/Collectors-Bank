@@ -1,4 +1,3 @@
-import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
   // }
 
   Widget checkIfImage(ModelMtgCard card) {
-    if (card.image == '') {
+    if (card.image_uris.normal == '') {
       return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -45,7 +44,7 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
                       color: Color.fromARGB(255, 220, 220, 220),
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
-                  card.number),
+                  card.collector_number),
             ),
             Text(
                 style: const TextStyle(
@@ -57,8 +56,9 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
         ),
       );
     } else {
-      return Image.memory(
-          Uri.parse(card.image).data?.contentAsBytes() as Uint8List);
+      return Image.memory(Uri.parse(card.image_uris.normal)
+          .data
+          ?.contentAsBytes() as Uint8List);
     }
   }
 

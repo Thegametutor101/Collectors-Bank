@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:collectors_bank/bindings/models/mtg/model_set.dart';
-import 'package:collectors_bank/features/mtg/mtg_set.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/screens/mtg_set.dart';
 import 'package:collectors_bank/utils/http/http_server_mtg.dart';
 
 // ignore: must_be_immutable

@@ -1,5 +1,5 @@
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
-import 'package:collectors_bank/features/mtg/mtg_sets.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/screens/mtg_sets.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +34,10 @@ class MTGHome extends StatelessWidget {
           data: NavigationBarThemeData(
             indicatorColor: CollectorsBankColors.primaryColor,
             backgroundColor: CollectorsBankColors.scaffoldColor,
-            labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>(
-              (Set<MaterialState> states) =>
-                  states.contains(MaterialState.selected)
-                      ? TextStyle(color: CollectorsBankColors.primaryColor)
-                      : const TextStyle(color: Colors.white),
+            labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
+              (Set<WidgetState> states) => states.contains(WidgetState.selected)
+                  ? const TextStyle(color: CollectorsBankColors.primaryColor)
+                  : const TextStyle(color: Colors.white),
             ),
           ),
           child: NavigationBar(
