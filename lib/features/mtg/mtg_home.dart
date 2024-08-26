@@ -1,4 +1,3 @@
-import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:collectors_bank/features/mtg/mtg_sets/screens/mtg_sets.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
@@ -8,17 +7,19 @@ import 'package:iconsax/iconsax.dart';
 
 // ignore: must_be_immutable
 class MTGHome extends StatelessWidget {
-  MTGHome({super.key});
+  const MTGHome({super.key});
 
-  List<MtgProfile> mtgProfile = [];
+  // List<MtgProfile> mtgProfile = [];
 
-  void loadMtgData() async {
-    mtgProfile = await CollectorsBankStorageMtg().readMTGData();
-  }
+  // void loadMtgData() async {
+  //   mtgProfile = await CollectorsBankStorageMtg().readMTGData();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    loadMtgData();
+    // loadMtgData();
+    final profileController = Get.put(CollectorsBankStorageMtg());
+    profileController.readMTGData();
     final controller = Get.put(NavigationController());
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +38,7 @@ class MTGHome extends StatelessWidget {
             labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
               (Set<WidgetState> states) => states.contains(WidgetState.selected)
                   ? const TextStyle(color: CollectorsBankColors.primaryColor)
-                  : const TextStyle(color: Colors.white),
+                  : const TextStyle(color: CollectorsBankColors.textColor),
             ),
           ),
           child: NavigationBar(
@@ -50,25 +51,25 @@ class MTGHome extends StatelessWidget {
                 NavigationDestination(
                     icon: Icon(
                       Iconsax.book,
-                      color: Colors.white,
+                      color: CollectorsBankColors.textColor,
                     ),
                     label: "Catalogue"),
                 NavigationDestination(
                     icon: Icon(
                       Iconsax.bank,
-                      color: Colors.white,
+                      color: CollectorsBankColors.textColor,
                     ),
                     label: "Collection"),
                 NavigationDestination(
                     icon: Icon(
                       Iconsax.note,
-                      color: Colors.white,
+                      color: CollectorsBankColors.textColor,
                     ),
                     label: "Decks"),
                 NavigationDestination(
                     icon: Icon(
                       Iconsax.camera,
-                      color: Colors.white,
+                      color: CollectorsBankColors.textColor,
                     ),
                     label: "Scan"),
               ]),
@@ -82,7 +83,7 @@ class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 
   final screens = [
-    MTGSets(mtgProfile: MTGHome().mtgProfile),
+    const MTGSets(),
     Container(color: Colors.blue),
     Container(color: Colors.deepPurple),
     Container(color: Colors.amber)

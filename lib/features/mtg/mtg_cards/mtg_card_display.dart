@@ -1,5 +1,4 @@
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
 
@@ -28,7 +27,8 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
   // }
 
   Widget checkIfImage(ModelMtgCard card) {
-    if (card.image_uris.normal == '') {
+    String image = card.image_uris.normal;
+    if (image == '') {
       return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -56,9 +56,7 @@ class _MTGCardPageDisplay extends State<MTGCardPageDisplay> {
         ),
       );
     } else {
-      return Image.memory(Uri.parse(card.image_uris.normal)
-          .data
-          ?.contentAsBytes() as Uint8List);
+      return Image.network(image);
     }
   }
 

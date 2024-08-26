@@ -81,24 +81,22 @@ class CollectorsBankHelperFunctions {
     }
   }
 
-  static List<String> addListString(List list) {
-    List<String> item = List.empty();
-    if (list.isEmpty) {
-      return item;
-    }
-    for (var i in list) {
-      item.add(checkIfStringNull(i));
+  static List<String> addListString(List? list) {
+    List<String> item = [];
+    if (list != null) {
+      for (var i in list) {
+        item.add(checkIfStringNull(i));
+      }
     }
     return item;
   }
 
-  static List<int> addListInt(List list) {
-    List<int> item = List.empty();
-    if (list.isEmpty) {
-      return item;
-    }
-    for (var i in list) {
-      item.add(checkIfIntNull(i));
+  static List<int> addListInt(List? list) {
+    List<int> item = [];
+    if (list != null) {
+      for (var i in list) {
+        item.add(checkIfIntNull(i));
+      }
     }
     return item;
   }

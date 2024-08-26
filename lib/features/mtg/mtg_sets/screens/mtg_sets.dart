@@ -1,15 +1,20 @@
+import 'package:collectors_bank/features/mtg/mtg_sets/controllers/all_sets_controller.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/screens/sections/sets_dot_navigation.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/screens/sections/sets_info_icon.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/screens/sections/sets_list.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/screens/sections/sets_search_icon.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
 import 'package:collectors_bank/bindings/models/mtg/model_set.dart';
-import 'package:collectors_bank/features/mtg/mtg_sets/screens/mtg_set.dart';
 import 'package:collectors_bank/utils/http/http_server_mtg.dart';
+import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class MTGSets extends StatefulWidget {
-  MTGSets({super.key, required List<MtgProfile> mtgProfile});
-  List<MtgProfile> mtgProfile = [];
+  const MTGSets({super.key});
+  // List<MtgProfile> mtgProfile = [];
 
   @override
   State<MTGSets> createState() => _MTGSetsState();
@@ -22,18 +27,9 @@ class _MTGSetsState extends State<MTGSets> {
     });
   }
 
-  String getSetCollected(String setCode, List<MtgProfile> mtgProfile) {
-    String collected = '0';
-    for (var set in mtgProfile) {
-      if (set.profileSet.setCode == setCode) {
-        collected = set.profileSet.collected;
-      }
-    }
-    return collected;
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AllSetsController());
     return FutureBuilder<List<ModelMtgSet>>(
       future: CollectorsBankHttpServer.getMtgSets(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -56,7 +52,8 @@ class _MTGSetsState extends State<MTGSets> {
                   ),
                 ),
                 const DefaultTextStyle(
-                  style: TextStyle(color: Color.fromARGB(255, 200, 200, 200)),
+                  style:
+                      TextStyle(color: CollectorsBankColors.textSecondaryColor),
                   child: Center(
                     child: Text('Please wait for data to load.'),
                   ),
@@ -73,51 +70,53 @@ class _MTGSetsState extends State<MTGSets> {
           );
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          List<ModelMtgSet> sets = [];
+          List<ModelMtgSet> setsPrimary = [];
+          List<ModelMtgSet> setsSecondary = [];
+          List<ModelMtgSet> setsMisc = [];
           List<ModelMtgSet> setData = snapshot.data;
           for (var set in setData) {
             if (set.set_type == 'core' ||
                 set.set_type == 'expansion' ||
                 set.set_type == 'masters' ||
                 set.set_type == 'draft_innovation') {
-              sets.add(set);
+              setsPrimary.add(set);
+            } else if (set.set_type == 'from_the_vault' ||
+                set.set_type == 'spellbook' ||
+                set.set_type == 'duel_deck' ||
+                set.set_type == 'commander') {
+              setsSecondary.add(set);
+            } else {
+              setsMisc.add(set);
             }
           }
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: sets.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                textColor: const Color.fromARGB(255, 250, 250, 250),
-                title: Text(sets[index].name),
-                subtitle: Flex(
-                  direction: Axis.horizontal,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      sets[index].code.toUpperCase(),
-                      style: const TextStyle().copyWith(
-                          color: CollectorsBankColors.textSecondaryColor),
-                    ),
-                    Text(
-                        "${getSetCollected(sets[index].code, widget.mtgProfile)}/${sets[index].card_count}"),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => MTGSetPage(
-                          mtgProfile: widget.mtgProfile,
-                          setCode: sets[index].code,
-                          setName: sets[index].name),
-                    ),
-                  );
-                },
-              );
-            },
+          return Stack(
+            children: [
+              //Info icon of lists
+              const SetsInfoIcon(),
+
+              //Dot Navigation SmoothPageIndicator
+              const SetsDotNavigation(),
+
+              //Search Bar
+              const SetsSearchIcon(),
+
+              //ListView for sets
+              PageView(
+                controller: controller.pageController,
+                onPageChanged: controller.updatePageIndicator,
+                children: [
+                  SetsList(
+                    sets: setsPrimary,
+                  ),
+                  SetsList(
+                    sets: setsSecondary,
+                  ),
+                  SetsList(
+                    sets: setsMisc,
+                  ),
+                ],
+              ),
+            ],
           );
         }
         return const Center(

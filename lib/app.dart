@@ -43,8 +43,8 @@ class HomePage extends StatelessWidget {
           shrinkWrap: true,
           children: [
             IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              splashColor: CollectorsBankColors.transparent,
+              highlightColor: CollectorsBankColors.transparent,
               icon: const Image(
                   image: AssetImage(CollectorsBankImageStrings.mtgDefault)),
               selectedIcon: const Image(
@@ -54,14 +54,14 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => MTGHome(),
+                    builder: (_) => const MTGHome(),
                   ),
                 );
               },
             ),
             IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              splashColor: CollectorsBankColors.transparent,
+              highlightColor: CollectorsBankColors.transparent,
               icon: const Image(
                   image: AssetImage(CollectorsBankImageStrings.pokDefault)),
               selectedIcon: const Image(
@@ -79,8 +79,8 @@ class HomePage extends StatelessWidget {
               },
             ),
             IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              splashColor: CollectorsBankColors.transparent,
+              highlightColor: CollectorsBankColors.transparent,
               icon: const Image(
                   image: AssetImage(CollectorsBankImageStrings.ygoDefault)),
               selectedIcon: const Image(

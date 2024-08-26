@@ -23,21 +23,36 @@ class CollectorsBankHttpServer {
   }
 
   static Future<List<ModelMtgCard>> getMtgCards(
-      String setCode, String parameters) async {
-    var response = await http.get(
-        Uri.parse('${APIConstants.scryfallCardsInSet}$parameters'),
-        headers: {'Accept': 'application/json'});
-    if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      List<ModelMtgCard> result = [];
-      for (var cards in jsonData['data']) {
-        result.add(ModelMtgCard.fromJson(cards));
+      String setCode, String uri) async {
+    http.Response response;
+    dynamic jsonData;
+    bool next_page = true;
+    String nextPageUri = "";
+    List<ModelMtgCard> result = [];
+    while (next_page) {
+      if (nextPageUri == "") {
+        response = await http
+            .get(Uri.parse(uri), headers: {'Accept': 'application/json'});
+      } else {
+        response = await http.get(Uri.parse(nextPageUri),
+            headers: {'Accept': 'application/json'});
       }
-      return result;
-    } else {
-      throw Exception(
-          'Sorry!\nFailed to retreive Magic the Gathering cards for set ${setCode.toUpperCase()} from our servers.');
+      if (response.statusCode == 200) {
+        jsonData = jsonDecode(response.body);
+        for (var cards in jsonData['data']) {
+          result.add(ModelMtgCard.fromJson(cards));
+        }
+        if (jsonData["has_more"]) {
+          nextPageUri = jsonData["next_page"];
+        } else {
+          next_page = false;
+        }
+      } else {
+        throw Exception(
+            'Sorry!\nFailed to retreive Magic the Gathering cards for set ${setCode.toUpperCase()} from our servers.');
+      }
     }
+    return result;
   }
 
   static Future<List<ModelRulings>> getMtgCardRulings(

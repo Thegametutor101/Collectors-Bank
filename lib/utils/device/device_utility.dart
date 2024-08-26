@@ -36,7 +36,7 @@ class CollectorsBankDeviceUtils {
   }
 
   static double getScreenWidth(BuildContext context) {
-    return MediaQuery.of(Get.context!).size.width;
+    return MediaQuery.of(context).size.width;
   }
 
   static bool isDarkMode(BuildContext context) {
