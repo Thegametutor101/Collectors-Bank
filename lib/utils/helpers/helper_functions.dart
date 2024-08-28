@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
-import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -131,14 +129,11 @@ class CollectorsBankHelperFunctions {
         ],
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: CollectorsBankSizes.sm),
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Image.network(image).image,
-              fit: BoxFit.scaleDown,
-            ),
+      return Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: Image.network(image).image,
+            fit: BoxFit.scaleDown,
           ),
         ),
       );

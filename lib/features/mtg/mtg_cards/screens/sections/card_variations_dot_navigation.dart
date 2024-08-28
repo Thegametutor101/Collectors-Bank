@@ -11,7 +11,7 @@ class CardVariationsDotNavigation extends StatelessWidget {
     final controller = CardVariationsController.instance;
     bool dark = CollectorsBankDeviceUtils.isDarkMode(context);
     return Positioned(
-      bottom: CollectorsBankDeviceUtils.getBottomNavigationBarHeight(),
+      top: CollectorsBankDeviceUtils.getAppBarHeight() - 25,
       child: SizedBox(
         width: CollectorsBankDeviceUtils.getScreenWidth(context),
         child: Align(

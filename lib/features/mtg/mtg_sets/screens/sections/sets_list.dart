@@ -24,8 +24,8 @@ class _SetsListState extends State<SetsList> {
     String collected = '0';
     for (var set in widget.mtgProfile) {
       if (set.profileSet.setCode == setCode) {
-        print("setCode: $setCode");
-        print("collected: ${set.profileSet.collected}");
+        // print("setCode: $setCode");
+        // print("collected: ${set.profileSet.collected}");
         collected = set.profileSet.collected.toString();
       }
     }
@@ -82,10 +82,7 @@ class _SetsListState extends State<SetsList> {
                 ],
               ),
               onTap: () async {
-                final back = await Get.to(MtgSetPage(
-                    setUri: widget.sets[index].search_uri,
-                    setCode: widget.sets[index].code,
-                    setName: widget.sets[index].name));
+                final back = await Get.to(MtgSetPage(set: widget.sets[index]));
                 if (back == "updateCollected") {
                   updateCollected();
                 }

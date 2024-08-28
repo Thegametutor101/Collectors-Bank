@@ -9,6 +9,8 @@ class MtgProfile {
       profileSet: MtgProfileSet(
           setCode: CollectorsBankHelperFunctions.checkIfStringNull(
               json["profileSets"]["setCode"]),
+          uri: CollectorsBankHelperFunctions.checkIfStringNull(
+              json["profileSets"]["uri"]),
           collected: CollectorsBankHelperFunctions.checkIfIntNull(
               json["profileSets"]["collected"]),
           cards: json["profileSets"]["profileCards"]
@@ -19,6 +21,7 @@ class MtgProfile {
     return {
       "profileSets": {
         "setCode": profileSet.setCode,
+        "uri": profileSet.uri,
         "collected": profileSet.collected,
         "profileCards": _loopCardsToJson(profileSet.cards)
       }
@@ -28,6 +31,9 @@ class MtgProfile {
   static MtgProfileCard _loopCards(Map<String, dynamic> json) => MtgProfileCard(
       cardCode:
           CollectorsBankHelperFunctions.checkIfStringNull(json["cardCode"]),
+      uri: CollectorsBankHelperFunctions.checkIfStringNull(json["uri"]),
+      imageUri:
+          CollectorsBankHelperFunctions.checkIfStringNull(json["imageUri"]),
       owned: CollectorsBankHelperFunctions.checkIfIntNull(json["owned"]),
       inDecks: CollectorsBankHelperFunctions.checkIfIntNull(json["inDecks"]));
 
@@ -43,22 +49,38 @@ class MtgProfile {
 
 class MtgProfileSet {
   final String setCode;
+  final String uri;
   int collected;
   List<MtgProfileCard> cards;
 
   MtgProfileSet(
-      {required this.setCode, required this.collected, required this.cards});
+      {required this.setCode,
+      required this.uri,
+      required this.collected,
+      required this.cards});
 }
 
 class MtgProfileCard {
   final String cardCode;
+  final String uri;
+  final String imageUri;
   int owned;
   int inDecks;
 
   MtgProfileCard(
-      {required this.cardCode, required this.owned, required this.inDecks});
+      {required this.cardCode,
+      required this.uri,
+      required this.imageUri,
+      required this.owned,
+      required this.inDecks});
 
   Map<String, dynamic> toJson() {
-    return {"cardCode": cardCode, "owned": owned, "inDecks": inDecks};
+    return {
+      "cardCode": cardCode,
+      "uri": uri,
+      "imageUri": imageUri,
+      "owned": owned,
+      "inDecks": inDecks
+    };
   }
 }

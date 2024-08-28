@@ -1,7 +1,4 @@
-import 'dart:convert';
-import 'dart:isolate';
 import 'package:collectors_bank/common/profiles/mtg_profile.dart';
-import 'package:collectors_bank/bindings/models/mtg/view_mtg_card_variants.dart';
 import 'package:get/get.dart';
 import 'package:json_store/json_store.dart';
 
@@ -32,47 +29,5 @@ class CollectorsBankStorageMtg extends GetxController {
 
   void deleteMTGData() async {
     await _jsonStore.deleteItem('mtgProfile');
-  }
-}
-
-class JsonParserMtgProfile {
-  JsonParserMtgProfile(this.encodedJson);
-  final String encodedJson;
-
-  Future<List<MtgProfile>> parseInBackground() async {
-    final p = ReceivePort();
-    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
-    return await p.first;
-  }
-
-  Future<void> _decodeAndParseJson(SendPort port) async {
-    if (encodedJson.isEmpty) {
-      Isolate.exit(port, List<MtgProfile>.empty(growable: true));
-    }
-    final jsonData = jsonDecode(encodedJson);
-    final resultJson = jsonData as List<dynamic>;
-    final result = resultJson
-        .map((json) => MtgProfile.fromJson(json))
-        .toList(growable: true);
-    Isolate.exit(port, result);
-  }
-}
-
-class JsonParserViewMTGCardVariantsToList {
-  JsonParserViewMTGCardVariantsToList(this.encodedJson);
-  final String encodedJson;
-
-  Future<List<ViewMTGCardVariants>> parseInBackground() async {
-    final p = ReceivePort();
-    await Isolate.spawn(_decodeAndParseJson, p.sendPort);
-    return await p.first;
-  }
-
-  Future<void> _decodeAndParseJson(SendPort port) async {
-    final jsonData = jsonDecode(encodedJson);
-    final resultJson = jsonData as List<dynamic>;
-    final result =
-        resultJson.map((json) => ViewMTGCardVariants.fromJson(json)).toList();
-    Isolate.exit(port, result);
   }
 }

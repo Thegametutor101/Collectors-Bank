@@ -1,4 +1,5 @@
 import 'package:collectors_bank/features/fetch_loaders.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/models/model_set.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/constants/variables.dart';
 import 'package:collectors_bank/utils/helpers/helper_functions.dart';
@@ -10,15 +11,9 @@ import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class MtgSetPage extends StatefulWidget {
-  const MtgSetPage(
-      {super.key,
-      required this.setUri,
-      required this.setCode,
-      required this.setName});
+  const MtgSetPage({super.key, required this.set});
 
-  final String setUri;
-  final String setCode;
-  final String setName;
+  final ModelMtgSet set;
 
   @override
   State<MtgSetPage> createState() => _MtgSetPage();
@@ -28,14 +23,14 @@ class _MtgSetPage extends State<MtgSetPage> {
   @override
   Widget build(BuildContext context) {
     // Get.back(result: "updateCollected");
-    String setName = widget.setName;
+    String setName = widget.set.name;
     return Scaffold(
       appBar: AppBar(
         title: Text(setName),
       ),
       body: FutureBuilder<List<ModelMtgCard>>(
-        future:
-            CollectorsBankHttpServer.getMtgCards(widget.setCode, widget.setUri),
+        future: CollectorsBankHttpServer.getMtgCards(
+            widget.set.code, widget.set.search_uri),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||
               snapshot.connectionState == ConnectionState.waiting) {
@@ -73,8 +68,12 @@ class _MtgSetPage extends State<MtgSetPage> {
                           ),
                         );
                       },
-                      child: CollectorsBankHelperFunctions.checkIfMtgImage(
-                          cards[index]),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: CollectorsBankSizes.sm),
+                        child: CollectorsBankHelperFunctions.checkIfMtgImage(
+                            cards[index]),
+                      ),
                     ),
                   );
                 },

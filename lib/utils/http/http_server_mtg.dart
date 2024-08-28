@@ -73,6 +73,19 @@ class CollectorsBankHttpServer {
     }
   }
 
+  static Future<ModelMtgCard> getMtgCardsByUri(String uri) async {
+    var response =
+        await http.get(Uri.parse(uri), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      ModelMtgCard card = ModelMtgCard.fromJson(jsonData);
+      return card;
+    } else {
+      throw Exception(
+          "Sorry!\nFailed to retreive the selected card's information from our servers.");
+    }
+  }
+
   static Future<List<ModelRulings>> getMtgCardRulings(
       String cardName, String rulingsUri) async {
     var response = await http
