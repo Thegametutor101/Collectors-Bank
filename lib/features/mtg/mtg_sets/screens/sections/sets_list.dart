@@ -1,73 +1,94 @@
-import 'package:collectors_bank/bindings/models/mtg/model_set.dart';
+import 'package:collectors_bank/common/profiles/mtg_profile.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/models/model_set.dart';
 import 'package:collectors_bank/features/mtg/mtg_sets/screens/mtg_set.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
+import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
+import 'package:collectors_bank/utils/theme/custom_themes/border_side_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // ignore: must_be_immutable
-class SetsList extends StatelessWidget {
-  const SetsList({super.key, required this.sets});
+class SetsList extends StatefulWidget {
+  SetsList({super.key, required this.sets, required this.mtgProfile});
 
   final List<ModelMtgSet> sets;
+  List<MtgProfile> mtgProfile;
 
+  @override
+  State<SetsList> createState() => _SetsListState();
+}
+
+class _SetsListState extends State<SetsList> {
   String getSetCollected(String setCode) {
     String collected = '0';
-    for (var set in CollectorsBankStorageMtg.instance.storage) {
+    for (var set in widget.mtgProfile) {
       if (set.profileSet.setCode == setCode) {
-        collected = set.profileSet.collected;
+        print("setCode: $setCode");
+        print("collected: ${set.profileSet.collected}");
+        collected = set.profileSet.collected.toString();
       }
     }
     return collected;
   }
 
+  Future updateCollected() async {
+    var data = await CollectorsBankStorageMtg.instance.readMTGData();
+    setState(() {
+      widget.mtgProfile = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool dark = CollectorsBankDeviceUtils.isDarkMode(context);
     return Padding(
       padding: const EdgeInsets.only(top: 65),
       child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(
-                color: CollectorsBankColors.scaffoldAccentColor,
-                style: BorderStyle.solid,
-                width: 2),
+            top: dark
+                ? CollectorsBankBorderSideTheme.darkBorderSideTheme
+                : CollectorsBankBorderSideTheme.lightBorderSideTheme,
           ),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.elliptical(10, 7),
               topRight: Radius.elliptical(10, 7)),
         ),
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: sets.length,
+          itemCount: widget.sets.length,
           itemBuilder: (context, index) {
             return ListTile(
-              textColor: CollectorsBankColors.textColor,
-              title: Text(sets[index].name),
+              textColor: dark
+                  ? CollectorsBankColors.darkTextColor
+                  : CollectorsBankColors.lightTextColor,
+              title: Text(widget.sets[index].name),
               subtitle: Flex(
                 direction: Axis.horizontal,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    sets[index].code.toUpperCase(),
+                    widget.sets[index].code.toUpperCase(),
                     style: const TextStyle().copyWith(
-                        color: CollectorsBankColors.textSecondaryColor),
+                        color: dark
+                            ? CollectorsBankColors.darkTextSecondaryColor
+                            : CollectorsBankColors.lightTextSecondaryColor),
                   ),
                   Text(
-                      "${getSetCollected(sets[index].code)}/${sets[index].card_count}"),
+                      "${getSetCollected(widget.sets[index].code)}/${widget.sets[index].card_count}"),
                 ],
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => MTGSetPage(
-                        setUri: sets[index].search_uri,
-                        setCode: sets[index].code,
-                        setName: sets[index].name),
-                  ),
-                );
+              onTap: () async {
+                final back = await Get.to(MtgSetPage(
+                    setUri: widget.sets[index].search_uri,
+                    setCode: widget.sets[index].code,
+                    setName: widget.sets[index].name));
+                if (back == "updateCollected") {
+                  updateCollected();
+                }
               },
             );
           },

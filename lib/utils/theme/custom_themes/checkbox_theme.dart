@@ -8,16 +8,16 @@ class CollectorsBankCheckboxTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       checkColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return Colors.white;
+          return CollectorsBankColors.darkTextColor;
         } else {
-          return Colors.black;
+          return CollectorsBankColors.lightTextColor;
         }
       }),
       fillColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return CollectorsBankColors.primaryColor;
+          return CollectorsBankColors.lightPrimaryColor;
         } else {
-          return Colors.transparent;
+          return CollectorsBankColors.transparent;
         }
       }));
 
@@ -25,16 +25,16 @@ class CollectorsBankCheckboxTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       checkColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return Colors.white;
+          return CollectorsBankColors.darkTextColor;
         } else {
-          return Colors.black;
+          return CollectorsBankColors.lightTextColor;
         }
       }),
       fillColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return CollectorsBankColors.primaryColor;
+          return CollectorsBankColors.darkPrimaryColor;
         } else {
-          return Colors.transparent;
+          return CollectorsBankColors.transparent;
         }
       }));
 }

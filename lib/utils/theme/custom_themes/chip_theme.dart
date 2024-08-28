@@ -6,17 +6,17 @@ class CollectorsBankChipTheme {
 
   static ChipThemeData lightChipTheme = ChipThemeData(
     disabledColor: Colors.grey.withOpacity(0.4),
-    labelStyle: const TextStyle(color: Colors.black),
-    selectedColor: CollectorsBankColors.primaryColor,
+    labelStyle: const TextStyle(color: CollectorsBankColors.lightTextColor),
+    selectedColor: CollectorsBankColors.lightPrimaryColor,
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-    checkmarkColor: Colors.white,
+    checkmarkColor: CollectorsBankColors.lightTextColor,
   );
 
   static ChipThemeData darkChipTheme = const ChipThemeData(
     disabledColor: Colors.grey,
-    labelStyle: TextStyle(color: Colors.white),
-    selectedColor: CollectorsBankColors.primaryColor,
+    labelStyle: TextStyle(color: CollectorsBankColors.darkTextColor),
+    selectedColor: CollectorsBankColors.darkPrimaryColor,
     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-    checkmarkColor: Colors.white,
+    checkmarkColor: CollectorsBankColors.darkTextColor,
   );
 }

@@ -9,10 +9,15 @@ class CollectorsBankSizes {
   static const double iconSm = 16;
   static const double iconMd = 24;
   static const double iconLg = 32;
+  static const double iconXl = 48;
+  static const double icon2x = 64;
 
-  static const double fontSizeSm = 14;
-  static const double fontSizeMd = 16;
-  static const double fontSizeLg = 18;
+  static const double fontSizeXs = 14;
+  static const double fontSizeSm = 16;
+  static const double fontSizeMd = 18;
+  static const double fontSizeLg = 22;
+  static const double fontSizeXl = 28;
+  static const double fontSize2X = 34;
 
   static const double buttonHeight = 18;
   static const double buttonRadius = 12;

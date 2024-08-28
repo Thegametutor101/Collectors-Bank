@@ -1,4 +1,3 @@
-import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ class SetsSearchIcon extends StatelessWidget {
         onPressed: () {},
         icon: const Icon(
           Iconsax.search_normal,
-          color: CollectorsBankColors.textColor,
           size: 40,
         ),
       ),

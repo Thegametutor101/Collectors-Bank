@@ -1,38 +1,37 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:isolate';
-import 'package:collectors_bank/bindings/profiles/mtg_profile.dart';
-import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
+import 'package:collectors_bank/common/profiles/mtg_profile.dart';
 import 'package:collectors_bank/bindings/models/mtg/view_mtg_card_variants.dart';
-import 'package:collectors_bank/utils/helpers/helper_functions.dart';
 import 'package:get/get.dart';
+import 'package:json_store/json_store.dart';
 
 class CollectorsBankStorageMtg extends GetxController {
   static CollectorsBankStorageMtg get instance => Get.find();
 
-  List<MtgProfile> storage = List.empty(growable: true);
+  final JsonStore _jsonStore = JsonStore();
 
   Future<List<MtgProfile>> readMTGData() async {
-    try {
-      final file =
-          await CollectorsBankHelperFunctions.localFile('MTGData.json');
-      final contents = await file.readAsString();
-      storage = JsonParserMtgProfile(contents).parseInBackground()
-          as List<MtgProfile>;
-      return storage;
-    } catch (e) {
-      return storage;
+    Map<String, dynamic>? json = await _jsonStore.getItem('mtgProfile');
+    List<MtgProfile> result = [];
+    if (json != null) {
+      for (var profile in json["data"]) {
+        result.add(MtgProfile.fromJson(profile));
+      }
     }
+    return result;
   }
 
-  Future<File> writeMTGData() async {
-    final file = await CollectorsBankHelperFunctions.localFile('MTGData.json');
-    return file.writeAsString(jsonEncode(storage));
+  void writeMTGData(List<MtgProfile> profile) async {
+    List<Map<String, dynamic>> profileString = [];
+    for (var set in profile) {
+      profileString.add(set.toJson());
+    }
+    Map<String, dynamic> json = {"data": profileString};
+    await _jsonStore.setItem('mtgProfile', json);
   }
 
-  static Future<void> deleteMTGData() async {
-    final file = await CollectorsBankHelperFunctions.localFile('MTGData.json');
-    file.delete();
+  void deleteMTGData() async {
+    await _jsonStore.deleteItem('mtgProfile');
   }
 }
 

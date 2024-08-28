@@ -1,17 +1,17 @@
-import 'package:collectors_bank/features/mtg/mtg_sets/controllers/all_sets_controller.dart';
+import 'package:collectors_bank/features/mtg/mtg_cards/controllers/card_variations_controller.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class SetsDotNavigation extends StatelessWidget {
-  const SetsDotNavigation({super.key});
+class CardVariationsDotNavigation extends StatelessWidget {
+  const CardVariationsDotNavigation({super.key});
   @override
   Widget build(BuildContext context) {
-    final controller = AllSetsController.instance;
+    final controller = CardVariationsController.instance;
     bool dark = CollectorsBankDeviceUtils.isDarkMode(context);
     return Positioned(
-      top: CollectorsBankDeviceUtils.getAppBarHeight() - 25,
+      bottom: CollectorsBankDeviceUtils.getBottomNavigationBarHeight(),
       child: SizedBox(
         width: CollectorsBankDeviceUtils.getScreenWidth(context),
         child: Align(
@@ -19,7 +19,7 @@ class SetsDotNavigation extends StatelessWidget {
           child: SmoothPageIndicator(
             controller: controller.pageController,
             onDotClicked: controller.dotNavigationClick,
-            count: 3,
+            count: 2,
             effect: ExpandingDotsEffect(
                 activeDotColor: dark
                     ? CollectorsBankColors.darkPrimaryColor

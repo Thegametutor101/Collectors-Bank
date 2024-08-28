@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:collectors_bank/bindings/models/mtg/model_rulings.dart';
+import 'package:collectors_bank/features/mtg/mtg_cards/models/model_rulings.dart';
 import 'package:http/http.dart' as http;
 import 'package:collectors_bank/utils/constants/api_constants.dart';
-import 'package:collectors_bank/bindings/models/mtg/model_card.dart';
-import 'package:collectors_bank/bindings/models/mtg/model_set.dart';
+import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/models/model_set.dart';
 
 class CollectorsBankHttpServer {
   static Future<List<ModelMtgSet>> getMtgSets() async {
@@ -55,6 +55,24 @@ class CollectorsBankHttpServer {
     return result;
   }
 
+  static Future<List<ModelMtgCard>> getMtgCardsByName(String cardName) async {
+    var response = await http.get(
+        Uri.parse(
+            '${APIConstants.scryfallCardsSearch}include_extras=true&include_variations=true&order=set&q=!"$cardName"&unique=prints'),
+        headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      List<ModelMtgCard> result = [];
+      for (var cards in jsonData['data']) {
+        result.add(ModelMtgCard.fromJson(cards));
+      }
+      return result;
+    } else {
+      throw Exception(
+          'Sorry!\nFailed to retreive other versions of "$cardName" from our servers.');
+    }
+  }
+
   static Future<List<ModelRulings>> getMtgCardRulings(
       String cardName, String rulingsUri) async {
     var response = await http
@@ -62,8 +80,8 @@ class CollectorsBankHttpServer {
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       List<ModelRulings> result = [];
-      for (var cards in jsonData['data']) {
-        result.add(ModelRulings.fromJson(cards));
+      for (var rulings in jsonData['data']) {
+        result.add(ModelRulings.fromJson(rulings));
       }
       return result;
     } else {

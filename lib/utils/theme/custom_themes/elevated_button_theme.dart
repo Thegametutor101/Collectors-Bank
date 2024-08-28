@@ -7,27 +7,31 @@ class CollectorsBankElevatedButtonTheme {
   static final lightElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         elevation: 0,
-        foregroundColor: Colors.white,
-        backgroundColor: CollectorsBankColors.primaryColor,
+        foregroundColor: CollectorsBankColors.lightScaffoldAccentColor,
+        backgroundColor: CollectorsBankColors.lightPrimaryColor,
         disabledForegroundColor: Colors.grey,
         disabledBackgroundColor: Colors.grey,
-        side: const BorderSide(color: CollectorsBankColors.primaryColor),
+        side: const BorderSide(color: CollectorsBankColors.lightPrimaryColor),
         padding: const EdgeInsets.symmetric(vertical: 18),
         textStyle: const TextStyle(
-            fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+            fontSize: 16,
+            color: CollectorsBankColors.lightTextColor,
+            fontWeight: FontWeight.w600),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
   );
   static final darkElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         elevation: 0,
-        foregroundColor: Colors.black,
-        backgroundColor: CollectorsBankColors.primaryColor,
+        foregroundColor: CollectorsBankColors.darkScaffoldAccentColor,
+        backgroundColor: CollectorsBankColors.darkPrimaryColor,
         disabledForegroundColor: Colors.grey,
         disabledBackgroundColor: Colors.grey,
-        side: const BorderSide(color: CollectorsBankColors.primaryColor),
+        side: const BorderSide(color: CollectorsBankColors.darkPrimaryColor),
         padding: const EdgeInsets.symmetric(vertical: 18),
         textStyle: const TextStyle(
-            fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
+            fontSize: 16,
+            color: CollectorsBankColors.darkTextColor,
+            fontWeight: FontWeight.w600),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
   );
 }

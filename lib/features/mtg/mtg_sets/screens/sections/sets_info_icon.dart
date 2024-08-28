@@ -1,4 +1,3 @@
-import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +14,7 @@ class SetsInfoIcon extends StatelessWidget {
       child: IconButton(
         onPressed: () {},
         icon: const Icon(
-          Iconsax.information,
-          color: CollectorsBankColors.textColor,
+          Iconsax.info_circle,
           size: 40,
         ),
       ),

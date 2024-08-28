@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
+import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -99,5 +101,47 @@ class CollectorsBankHelperFunctions {
       }
     }
     return item;
+  }
+
+  static Widget checkIfMtgImage(ModelMtgCard card) {
+    String image = card.image_uris.normal;
+    if (image == "" && card.card_faces.isNotEmpty) {
+      image = card.card_faces[0].image_uris.normal;
+    }
+    if (image == "") {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text(
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 220, 220, 220),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+                card.collector_number),
+          ),
+          Text(
+              style: const TextStyle(
+                  color: Color.fromARGB(255, 220, 220, 220),
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+              card.name),
+        ],
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: CollectorsBankSizes.sm),
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: Image.network(image).image,
+              fit: BoxFit.scaleDown,
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

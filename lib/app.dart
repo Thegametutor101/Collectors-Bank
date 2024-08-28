@@ -1,17 +1,18 @@
+import 'package:collectors_bank/features/app_sections.dart';
 import 'package:collectors_bank/features/mtg/mtg_home.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/image_strings.dart';
 import 'package:collectors_bank/utils/constants/variables.dart';
-import 'package:collectors_bank/utils/helpers/helper_functions.dart';
 import 'package:collectors_bank/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CollectorsBank extends StatelessWidget {
   const CollectorsBank({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       themeMode: ThemeMode.system,
       theme: CollectorsBankTheme.lightTheme,
       darkTheme: CollectorsBankTheme.darkTheme,
@@ -32,7 +33,6 @@ class HomePage extends StatelessWidget {
           CollectorsBankVariables.appName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: CollectorsBankColors.primaryColor,
       ),
       body: Container(
         width: double.infinity,
@@ -42,60 +42,23 @@ class HomePage extends StatelessWidget {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           children: [
-            IconButton(
-              splashColor: CollectorsBankColors.transparent,
-              highlightColor: CollectorsBankColors.transparent,
-              icon: const Image(
-                  image: AssetImage(CollectorsBankImageStrings.mtgDefault)),
-              selectedIcon: const Image(
-                  image: AssetImage(CollectorsBankImageStrings.mtgPressed)),
-              iconSize: 250,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const MTGHome(),
-                  ),
-                );
-              },
+            const AppSection(
+              defaultImage: CollectorsBankImageStrings.mtgDefault,
+              pressedImage: CollectorsBankImageStrings.mtgPressed,
+              backgroundGradient: CollectorsBankColors.mtgBackgroundGradient,
+              targetPage: MTGHome(),
             ),
-            IconButton(
-              splashColor: CollectorsBankColors.transparent,
-              highlightColor: CollectorsBankColors.transparent,
-              icon: const Image(
-                  image: AssetImage(CollectorsBankImageStrings.pokDefault)),
-              selectedIcon: const Image(
-                  image: AssetImage(CollectorsBankImageStrings.pokPressed)),
-              iconSize: 250,
-              onPressed: () {
-                CollectorsBankHelperFunctions.showAlert(
-                    "WIP", "Sorry!\nThis section is under development");
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) => MTGHome(),
-                //   ),
-                // );
-              },
+            AppSection(
+              defaultImage: CollectorsBankImageStrings.pokDefault,
+              pressedImage: CollectorsBankImageStrings.pokPressed,
+              backgroundGradient: CollectorsBankColors.pokBackgroundGradient,
+              targetPage: Container(),
             ),
-            IconButton(
-              splashColor: CollectorsBankColors.transparent,
-              highlightColor: CollectorsBankColors.transparent,
-              icon: const Image(
-                  image: AssetImage(CollectorsBankImageStrings.ygoDefault)),
-              selectedIcon: const Image(
-                  image: AssetImage(CollectorsBankImageStrings.ygoPressed)),
-              iconSize: 250,
-              onPressed: () {
-                CollectorsBankHelperFunctions.showAlert(
-                    "WIP", "Sorry!\nThis section is under development");
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) => MTGHome(),
-                //   ),
-                // );
-              },
+            AppSection(
+              defaultImage: CollectorsBankImageStrings.ygoDefault,
+              pressedImage: CollectorsBankImageStrings.ygoPressed,
+              backgroundGradient: CollectorsBankColors.ygoBackgroundGradient,
+              targetPage: Container(),
             ),
           ],
         ),

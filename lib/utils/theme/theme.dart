@@ -15,8 +15,8 @@ class CollectorsBankTheme {
     useMaterial3: true,
     fontFamily: 'Roboto',
     brightness: Brightness.light,
-    primaryColor: CollectorsBankColors.primaryColor,
-    scaffoldBackgroundColor: CollectorsBankColors.scaffoldColor,
+    primaryColor: CollectorsBankColors.lightPrimaryColor,
+    scaffoldBackgroundColor: CollectorsBankColors.lightScaffoldColor,
     textTheme: CollectorsBankTextTheme.lightTextTheme,
     elevatedButtonTheme:
         CollectorsBankElevatedButtonTheme.lightElevatedButtonTheme,
@@ -31,8 +31,8 @@ class CollectorsBankTheme {
     useMaterial3: true,
     fontFamily: 'Roboto',
     brightness: Brightness.dark,
-    primaryColor: CollectorsBankColors.primaryColor,
-    scaffoldBackgroundColor: CollectorsBankColors.scaffoldColor,
+    primaryColor: CollectorsBankColors.darkPrimaryColor,
+    scaffoldBackgroundColor: CollectorsBankColors.darkScaffoldColor,
     textTheme: CollectorsBankTextTheme.darkTextTheme,
     elevatedButtonTheme:
         CollectorsBankElevatedButtonTheme.darkElevatedButtonTheme,
