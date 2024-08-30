@@ -3,6 +3,7 @@ import 'package:collectors_bank/features/mtg/mtg_sets/models/model_set.dart';
 import 'package:collectors_bank/features/mtg/mtg_sets/screens/mtg_set.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
+import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:collectors_bank/utils/theme/custom_themes/border_side_theme.dart';
 import 'package:flutter/material.dart';
@@ -20,18 +21,6 @@ class SetsList extends StatefulWidget {
 }
 
 class _SetsListState extends State<SetsList> {
-  String getSetCollected(String setCode) {
-    String collected = '0';
-    for (var set in widget.mtgProfile) {
-      if (set.profileSet.setCode == setCode) {
-        // print("setCode: $setCode");
-        // print("collected: ${set.profileSet.collected}");
-        collected = set.profileSet.collected.toString();
-      }
-    }
-    return collected;
-  }
-
   Future updateCollected() async {
     var data = await CollectorsBankStorageMtg.instance.readMTGData();
     setState(() {
@@ -78,7 +67,7 @@ class _SetsListState extends State<SetsList> {
                             : CollectorsBankColors.lightTextSecondaryColor),
                   ),
                   Text(
-                      "${getSetCollected(widget.sets[index].code)}/${widget.sets[index].card_count}"),
+                      "${CollectorsBankMtgHelperFunctions.getSetCollected(widget.sets[index].code, widget.mtgProfile)}/${widget.sets[index].card_count}"),
                 ],
               ),
               onTap: () async {

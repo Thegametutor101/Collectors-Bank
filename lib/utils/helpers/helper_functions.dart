@@ -1,8 +1,5 @@
-import 'dart:io';
-import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CollectorsBankHelperFunctions {
   static showSnackBar(String message) {
@@ -37,15 +34,6 @@ class CollectorsBankHelperFunctions {
       return '${text.substring(0, maxLength)}...';
     } else {
       return text;
-    }
-  }
-
-  static Future<File> localFile(String name) async {
-    final directory = await getApplicationDocumentsDirectory();
-    if (await File('${directory.path}/$name').exists()) {
-      return File('${directory.path}/$name');
-    } else {
-      return File('${directory.path}/$name').create();
     }
   }
 
@@ -101,42 +89,8 @@ class CollectorsBankHelperFunctions {
     return item;
   }
 
-  static Widget checkIfMtgImage(ModelMtgCard card) {
-    String image = card.image_uris.normal;
-    if (image == "" && card.card_faces.isNotEmpty) {
-      image = card.card_faces[0].image_uris.normal;
-    }
-    if (image == "") {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: Text(
-                style: const TextStyle(
-                    color: Color.fromARGB(255, 220, 220, 220),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-                card.collector_number),
-          ),
-          Text(
-              style: const TextStyle(
-                  color: Color.fromARGB(255, 220, 220, 220),
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold),
-              card.name),
-        ],
-      );
-    } else {
-      return Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: Image.network(image).image,
-            fit: BoxFit.scaleDown,
-          ),
-        ),
-      );
-    }
+  static double roundDouble(double value, int places) {
+    String num = value.toStringAsFixed(places);
+    return double.parse(num);
   }
 }

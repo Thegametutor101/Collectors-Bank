@@ -486,6 +486,17 @@ class Prices {
       eur_etched:
           CollectorsBankHelperFunctions.checkIfStringNull(json?["eur_etched"]),
       tix: CollectorsBankHelperFunctions.checkIfStringNull(json?["tix"]));
+
+  Map<String, dynamic> toJson() {
+    return {
+      "usd": usd,
+      "usd_foil": usd_foil,
+      "usd_etched": usd_etched,
+      "eur": eur,
+      "eur_foil": eur_foil,
+      "eur_etched": eur_etched
+    };
+  }
 }
 
 class Legalities {
@@ -588,5 +599,16 @@ class ImageUris {
             CollectorsBankHelperFunctions.checkIfStringNull(json?["art_crop"]),
         border_crop: CollectorsBankHelperFunctions.checkIfStringNull(
             json?["border_crop"]));
+  }
+  
+  Map<String, dynamic> toJson() {
+    return {
+      "small": small,
+      "normal": normal,
+      "large": large,
+      "png": png,
+      "art_crop": art_crop,
+      "border_crop": border_crop
+    };
   }
 }

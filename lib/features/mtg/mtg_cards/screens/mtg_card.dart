@@ -18,9 +18,12 @@ class MtgCard extends StatelessWidget {
     final controller = Get.put(CardVariationsController());
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "${card.set} - ${card.name}",
-          style: const TextStyle(fontWeight: FontWeight.bold),
+        title: FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Text(
+            "${card.name} (${card.set}#${card.collector_number})",
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       body: FutureBuilder<List<ModelMtgCard>>(

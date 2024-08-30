@@ -2,7 +2,7 @@ import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
-import 'package:collectors_bank/utils/helpers/helper_functions.dart';
+import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
 import 'package:collectors_bank/utils/theme/custom_themes/border_side_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +45,7 @@ class _MtgCardVersions extends State<MtgCardVersions> {
                     SizedBox(
                       height: 100,
                       width: 140,
-                      child: CollectorsBankHelperFunctions.checkIfMtgImage(
+                      child: CollectorsBankMtgHelperFunctions.checkIfMtgImage(
                           widget.cards[index]),
                     ),
                     Column(
