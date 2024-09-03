@@ -56,7 +56,10 @@ class _MtgCardVersions extends State<MtgCardVersions> {
                       children: [
                         Text(
                             "card number: ${widget.cards[index].collector_number}"),
-                        Text(widget.cards[index].set_name),
+                        FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(widget.cards[index].set_name),
+                        ),
                       ],
                     )
                   ],

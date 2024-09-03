@@ -79,7 +79,6 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
-    - assets/images/mtg_set_logos/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

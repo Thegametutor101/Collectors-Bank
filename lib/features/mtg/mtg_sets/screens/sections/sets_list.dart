@@ -63,14 +63,12 @@ class _SetsListState extends State<SetsList> {
                     child: SizedBox(
                       width: CollectorsBankSizes.iconSm,
                       height: CollectorsBankSizes.iconSm,
-                      child: Container(
-                        child: SvgPicture.network(
-                          widget.sets[index].icon_svg_uri,
-                          // ignore: deprecated_member_use
-                          color: dark
-                              ? CollectorsBankColors.darkTextSecondaryColor
-                              : CollectorsBankColors.lightTextSecondaryColor,
-                        ),
+                      child: SvgPicture.network(
+                        widget.sets[index].icon_svg_uri,
+                        // ignore: deprecated_member_use
+                        color: dark
+                            ? CollectorsBankColors.darkTextSecondaryColor
+                            : CollectorsBankColors.lightTextSecondaryColor,
                       ),
                     ),
                   ),

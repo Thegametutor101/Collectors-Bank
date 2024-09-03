@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class CollectorsBankHelperFunctions {
@@ -92,5 +93,13 @@ class CollectorsBankHelperFunctions {
   static double roundDouble(double value, int places) {
     String num = value.toStringAsFixed(places);
     return double.parse(num);
+  }
+
+  static Future? checkLoadAssets(String path) async {
+    try {
+      return await rootBundle.loadString(path);
+    } catch (_) {
+      return null;
+    }
   }
 }

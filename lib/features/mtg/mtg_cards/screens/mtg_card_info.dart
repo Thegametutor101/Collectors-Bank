@@ -1,15 +1,19 @@
+import 'dart:io';
+
 import 'package:collectors_bank/features/fetch_loaders.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_sets/models/model_symbols.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
-import 'package:collectors_bank/utils/constants/image_strings.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
+import 'package:collectors_bank/utils/helpers/helper_functions.dart';
 import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
 import 'package:collectors_bank/utils/http/http_server_mtg.dart';
 import 'package:collectors_bank/utils/theme/custom_themes/border_side_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconsax/iconsax.dart';
 
 class MtgCardInfo extends StatefulWidget {
   const MtgCardInfo({super.key, required this.card});
@@ -21,17 +25,17 @@ class MtgCardInfo extends StatefulWidget {
 }
 
 class _MtgCardInfo extends State<MtgCardInfo> {
-  List<Widget> showSymbols(ModelMtgCard card, List<ModelSymbols> symbols) {
-    List<Widget> icons = [];
-    List<String> values = [];
+  List<Widget> showManaCost(ModelMtgCard card, List<ModelSymbols> symbols) {
+    List<Widget> manaCost = [];
+    List<String> cardManaCostValues = [];
     if (card.mana_cost != "") {
-      values =
+      cardManaCostValues =
           card.mana_cost.substring(1, card.mana_cost.length - 1).split("}{");
     }
-    for (var icon in values) {
+    for (var icon in cardManaCostValues) {
       for (var symbol in symbols) {
         if (icon == symbol.symbol.substring(1, symbol.symbol.length - 1)) {
-          icons.add(
+          manaCost.add(
             Padding(
               padding: const EdgeInsets.symmetric(
                   horizontal: CollectorsBankSizes.xs),
@@ -45,24 +49,7 @@ class _MtgCardInfo extends State<MtgCardInfo> {
         }
       }
     }
-    return icons;
-  }
-
-  Widget getRarity(ModelMtgCard card) {
-    try {
-      return Padding(
-        padding:
-            const EdgeInsets.only(right: CollectorsBankSizes.spaceBtwItems),
-        child: SizedBox(
-          height: CollectorsBankSizes.iconMd,
-          width: CollectorsBankSizes.iconMd,
-          child: Image.asset(
-              "assets/images/mtg_set_logos/${card.set.toUpperCase()} - ${card.rarity.substring(0, 1).toUpperCase()}.png"),
-        ),
-      );
-    } catch (e) {
-      return Container();
-    }
+    return manaCost;
   }
 
   @override
@@ -160,7 +147,7 @@ class _MtgCardInfo extends State<MtgCardInfo> {
                       bottom: CollectorsBankSizes.spaceBtwItems),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: showSymbols(card, symbols),
+                    children: showManaCost(card, symbols),
                   ),
                 ),
 
@@ -175,12 +162,17 @@ class _MtgCardInfo extends State<MtgCardInfo> {
                   ),
                   child: Row(
                     children: [
-                      getRarity(card),
-                      FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: CollectorsBankSizes.spaceBtwItems),
+                      Text(card.rarity.substring(0, 1).toUpperCase()),
+                      Icon(
+                        Iconsax.star,
+                        color: CollectorsBankColors.mtgRarities[
+                            card.rarity.substring(0, 1).toUpperCase()],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: CollectorsBankSizes.spaceBtwItems),
+                        child: FittedBox(
+                          fit: BoxFit.fitWidth,
                           child: Text(
                             card.type_line,
                             style: const TextStyle(
@@ -214,12 +206,7 @@ class _MtgCardInfo extends State<MtgCardInfo> {
                   child: Padding(
                     padding:
                         const EdgeInsets.all(CollectorsBankSizes.spaceBtwItems),
-                    child: Text(
-                      card.oracle_text,
-                      style: const TextStyle(
-                        fontSize: CollectorsBankSizes.fontSizeMd,
-                      ),
-                    ),
+                    child: Text(card.oracle_text),
                   ),
                 ),
 

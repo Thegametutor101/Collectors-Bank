@@ -86,4 +86,6 @@ class CollectorsBankMtgHelperFunctions {
       ],
     );
   }
+
+  // static
 }
