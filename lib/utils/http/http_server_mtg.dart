@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_rulings.dart';
+import 'package:collectors_bank/features/mtg/mtg_sets/models/model_symbols.dart';
 import 'package:http/http.dart' as http;
 import 'package:collectors_bank/utils/constants/api_constants.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
@@ -100,6 +101,22 @@ class CollectorsBankHttpServer {
     } else {
       throw Exception(
           'Sorry!\nFailed to retreive card rulings for "$cardName" from our servers.');
+    }
+  }
+
+  static Future<List<ModelSymbols>> getMtgSymbols() async {
+    var response = await http.get(Uri.parse(APIConstants.scryfallSymbols),
+        headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      List<ModelSymbols> result = [];
+      for (var symbol in jsonData['data']) {
+        result.add(ModelSymbols.fromJson(symbol));
+      }
+      return result;
+    } else {
+      throw Exception(
+          'Sorry!\nFailed to retreive Magic the Gathering symbols from our servers.');
     }
   }
 }

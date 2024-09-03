@@ -46,7 +46,9 @@ class _MtgCardVersions extends State<MtgCardVersions> {
                       height: 100,
                       width: 140,
                       child: CollectorsBankMtgHelperFunctions.checkIfMtgImage(
-                          widget.cards[index]),
+                        widget.cards[index],
+                        false,
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,

@@ -1,4 +1,5 @@
 import 'package:collectors_bank/common/profiles/mtg_profile.dart';
+import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
@@ -186,114 +187,113 @@ class _MtgCardDisplay extends State<MtgCardDisplay> {
 
   Widget createFinish(
       bool dark, String finish, MtgProfileCardFinishes profileFinish) {
-    return Column(
-      children: [
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border(
-              top: dark
-                  ? CollectorsBankBorderSideTheme.darkBorderSideTheme
-                  : CollectorsBankBorderSideTheme.lightBorderSideTheme,
-            ),
-          ),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: CollectorsBankSizes.defaultSpace),
-              child: Text(
-                "Owned $finish copies",
-                style: const TextStyle(
-                  fontSize: CollectorsBankSizes.fontSizeLg,
-                ),
-              ),
-            ),
-          ),
+    String finishString = "Non-foil";
+    if (finish == "foil") {
+      finishString = "Foil";
+    } else if (finish == "etched") {
+      finishString = "Etched foil";
+    }
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border(
+          top: dark
+              ? CollectorsBankBorderSideTheme.darkBorderSideTheme
+              : CollectorsBankBorderSideTheme.lightBorderSideTheme,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: CollectorsBankSizes.sm),
+        child: Row(
           children: [
-            IconButton(
-              onPressed: () {
-                changeCardValues(false, finish);
-              },
-              icon: const Icon(
-                Iconsax.minus,
-                size: CollectorsBankSizes.iconXl,
+            SizedBox(
+              width: CollectorsBankDeviceUtils.getScreenWidth(context) * 0.65,
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Text(
+                      "$finishString copies",
+                      style: const TextStyle(
+                        fontSize: CollectorsBankSizes.fontSizeLg,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          changeCardValues(false, finish);
+                        },
+                        icon: const Icon(
+                          Iconsax.minus,
+                          size: CollectorsBankSizes.iconXl,
+                        ),
+                      ),
+                      Text(
+                        profileFinish.owned.toString(),
+                        style: const TextStyle(
+                          fontSize: CollectorsBankSizes.fontSize2X,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          changeCardValues(true, finish);
+                        },
+                        icon: const Icon(
+                          Iconsax.add,
+                          size: CollectorsBankSizes.iconXl,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: CollectorsBankSizes.defaultSpace),
-              child: Text(
-                profileFinish.owned.toString(),
-                style: const TextStyle(
-                  fontSize: CollectorsBankSizes.fontSize2X,
-                ),
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                changeCardValues(true, finish);
-              },
-              icon: const Icon(
-                Iconsax.add,
-                size: CollectorsBankSizes.iconXl,
+            SizedBox(
+              width: CollectorsBankDeviceUtils.getScreenWidth(context) * 0.35,
+              child: Column(
+                children: [
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: dark
+                            ? CollectorsBankBorderSideTheme.darkBorderSideTheme
+                            : CollectorsBankBorderSideTheme
+                                .lightBorderSideTheme,
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "In Decks",
+                        style: TextStyle(
+                          color: dark
+                              ? CollectorsBankColors.darkTextSecondaryColor
+                              : CollectorsBankColors.lightTextSecondaryColor,
+                          fontSize: CollectorsBankSizes.fontSizeLg,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    profileFinish.inDecks.toString(),
+                    style: TextStyle(
+                      color: dark
+                          ? CollectorsBankColors.darkTextSecondaryColor
+                          : CollectorsBankColors.lightTextSecondaryColor,
+                      fontSize: CollectorsBankSizes.fontSize2X,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
-        const SizedBox(
-          height: CollectorsBankSizes.spaceBtwItems,
-        ),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            border: Border(
-              top: dark
-                  ? CollectorsBankBorderSideTheme.darkBorderSideTheme
-                  : CollectorsBankBorderSideTheme.lightBorderSideTheme,
-            ),
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.elliptical(10, 7),
-                topRight: Radius.elliptical(10, 7)),
-          ),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: CollectorsBankSizes.defaultSpace),
-              child: Text(
-                "${finish}s in a Deck",
-                style: const TextStyle(
-                  fontSize: CollectorsBankSizes.fontSizeLg,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: CollectorsBankSizes.defaultSpace),
-              child: Text(
-                profileFinish.inDecks.toString(),
-                style: const TextStyle(
-                  fontSize: CollectorsBankSizes.fontSize2X,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: CollectorsBankSizes.spaceBtwItems,
-        ),
-      ],
+      ),
     );
   }
 
@@ -313,13 +313,19 @@ class _MtgCardDisplay extends State<MtgCardDisplay> {
               child: SizedBox(
                 height: CollectorsBankDeviceUtils.getScreenHeight() * 0.70,
                 width: CollectorsBankDeviceUtils.getScreenWidth(context) - 30,
-                child: CollectorsBankMtgHelperFunctions.checkIfMtgImage(card),
+                child: CollectorsBankMtgHelperFunctions.checkIfMtgImage(
+                  card,
+                  false,
+                ),
               ),
             ),
 
             /// create sections for each finish of the card
             Column(
               children: loopcreateFinish(dark, card.finishes),
+            ),
+            const SizedBox(
+              height: CollectorsBankSizes.dividerHeight,
             ),
 
             /// Button to add to deck

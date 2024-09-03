@@ -1,6 +1,7 @@
 import 'package:collectors_bank/features/fetch_loaders.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/controllers/card_variations_controller.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card_display.dart';
+import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card_info.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card_versions.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/sections/card_variations_dot_navigation.dart';
 import 'package:collectors_bank/utils/http/http_server_mtg.dart';
@@ -21,7 +22,7 @@ class MtgCard extends StatelessWidget {
         title: FittedBox(
           fit: BoxFit.fitWidth,
           child: Text(
-            "${card.name} (${card.set}#${card.collector_number})",
+            "${card.name} (${card.set} #${card.collector_number})",
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -49,6 +50,7 @@ class MtgCard extends StatelessWidget {
                 onPageChanged: controller.updatePageIndicator,
                 children: [
                   MtgCardDisplay(card: card),
+                  MtgCardInfo(card: card),
                   MtgCardVersions(cards: cardVersions)
                 ],
               ),

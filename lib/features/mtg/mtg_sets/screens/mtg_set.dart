@@ -72,7 +72,9 @@ class _MtgSetPage extends State<MtgSetPage> {
                         padding: const EdgeInsets.symmetric(
                             vertical: CollectorsBankSizes.sm),
                         child: CollectorsBankMtgHelperFunctions.checkIfMtgImage(
-                            cards[index]),
+                          cards[index],
+                          false,
+                        ),
                       ),
                     ),
                   );

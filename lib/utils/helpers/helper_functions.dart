@@ -62,7 +62,7 @@ class CollectorsBankHelperFunctions {
   }
 
   static double checkIfDoubleNull(Object? item) {
-    if (item == null) {
+    if (item == null || item == 0) {
       return 0;
     } else {
       return item as double;

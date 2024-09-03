@@ -1,4 +1,4 @@
-import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
+import 'package:collectors_bank/features/mtg/mtg_cards/models/model_prices.dart';
 import 'package:collectors_bank/utils/helpers/helper_functions.dart';
 
 class MtgProfile {

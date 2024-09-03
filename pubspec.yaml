@@ -42,6 +42,7 @@ dependencies:
   flutter_native_splash: ^2.3.2
   smooth_page_indicator: ^1.1.0
   json_store: ^2.0.2
+  flutter_svg: ^2.0.10
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -78,6 +79,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+    - assets/images/mtg_set_logos/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -10,7 +10,7 @@ class CollectorsBankNavigationBarTheme {
     backgroundColor: CollectorsBankColors.lightScaffoldColor,
     labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
       (Set<WidgetState> states) => states.contains(WidgetState.selected)
-          ? const TextStyle(color: CollectorsBankColors.lightPrimaryColor)
+          ? const TextStyle(color: CollectorsBankColors.darkPrimaryColor)
           : const TextStyle(color: CollectorsBankColors.lightTextColor),
     ),
   );
@@ -19,7 +19,7 @@ class CollectorsBankNavigationBarTheme {
     backgroundColor: CollectorsBankColors.darkScaffoldColor,
     labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
       (Set<WidgetState> states) => states.contains(WidgetState.selected)
-          ? const TextStyle(color: CollectorsBankColors.darkPrimaryColor)
+          ? const TextStyle(color: CollectorsBankColors.lightPrimaryColor)
           : const TextStyle(color: CollectorsBankColors.darkTextColor),
     ),
   );

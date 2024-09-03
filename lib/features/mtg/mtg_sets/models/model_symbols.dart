@@ -5,7 +5,7 @@ class ModelSymbols {
   final List<String> colors;
   final String english;
   final bool funny;
-  final String gatherer_alternates;
+  final List<String> gatherer_alternates;
   final bool hybrid;
   final String loose_variant;
   final double mana_value;
@@ -33,22 +33,26 @@ class ModelSymbols {
       required this.transposable});
 
   static ModelSymbols fromJson(Map<String, Object?> json) => ModelSymbols(
-      appears_in_mana_costs: json["appears_in_mana_costs"] as bool,
+      appears_in_mana_costs: CollectorsBankHelperFunctions.checkIfBoolNull(
+          json["appears_in_mana_costs"]),
       colors:
-          CollectorsBankHelperFunctions.addListString(json["colors"] as List),
-      english: json["english"] as String,
-      funny: json["funny"] as bool,
-      gatherer_alternates: CollectorsBankHelperFunctions.checkIfStringNull(
-          json["gatherer_alternates"]),
-      hybrid: json["hybrid"] as bool,
+          CollectorsBankHelperFunctions.addListString(json["colors"] as List?),
+      english: CollectorsBankHelperFunctions.checkIfStringNull(json["english"]),
+      funny: CollectorsBankHelperFunctions.checkIfBoolNull(json["funny"]),
+      gatherer_alternates: CollectorsBankHelperFunctions.addListString(
+          json["gatherer_alternates"] as List?),
+      hybrid: CollectorsBankHelperFunctions.checkIfBoolNull(json["hybrid"]),
       loose_variant: CollectorsBankHelperFunctions.checkIfStringNull(
           json["loose_variant"]),
       mana_value:
           CollectorsBankHelperFunctions.checkIfDoubleNull(json["mana_value"]),
       object: json["object"] as String,
-      phyrexian: json["phyrexian"] as bool,
-      represents_mana: json["represents_mana"] as bool,
+      phyrexian:
+          CollectorsBankHelperFunctions.checkIfBoolNull(json["phyrexian"]),
+      represents_mana: CollectorsBankHelperFunctions.checkIfBoolNull(
+          json["represents_mana"]),
       svg_uri: CollectorsBankHelperFunctions.checkIfStringNull(json["svg_uri"]),
-      symbol: json["symbol"] as String,
-      transposable: json["transposable"] as bool);
+      symbol: CollectorsBankHelperFunctions.checkIfStringNull(json["symbol"]),
+      transposable:
+          CollectorsBankHelperFunctions.checkIfBoolNull(json["transposable"]));
 }

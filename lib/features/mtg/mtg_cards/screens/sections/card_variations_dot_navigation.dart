@@ -19,7 +19,7 @@ class CardVariationsDotNavigation extends StatelessWidget {
           child: SmoothPageIndicator(
             controller: controller.pageController,
             onDotClicked: controller.dotNavigationClick,
-            count: 2,
+            count: 3,
             effect: ExpandingDotsEffect(
                 activeDotColor: dark
                     ? CollectorsBankColors.darkPrimaryColor
