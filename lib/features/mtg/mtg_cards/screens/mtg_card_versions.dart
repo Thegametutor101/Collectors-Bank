@@ -3,6 +3,7 @@ import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
+import 'package:collectors_bank/utils/helpers/router_helper.dart';
 import 'package:collectors_bank/utils/theme/custom_themes/border_side_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +53,6 @@ class _MtgCardVersions extends State<MtgCardVersions> {
                       width: 140,
                       child: CollectorsBankMtgHelperFunctions.checkIfMtgImage(
                         widget.cards[index],
-                        false,
                       ),
                     ),
                     Column(
@@ -70,13 +70,12 @@ class _MtgCardVersions extends State<MtgCardVersions> {
                   ],
                 ),
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.pushReplacementNamed(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => MtgCard(
-                        setIcon: widget.setIcon,
-                        card: widget.cards[index],
-                      ),
+                    RouterHelper.getMtgCard(),
+                    arguments: MtgCard(
+                      setIcon: widget.setIcon,
+                      card: widget.cards[index],
                     ),
                   );
                 },

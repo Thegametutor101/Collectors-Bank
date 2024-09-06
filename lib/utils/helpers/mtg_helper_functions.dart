@@ -1,5 +1,6 @@
 import 'package:collectors_bank/common/profiles/mtg_profile.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
+import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card_info.dart';
 import 'package:collectors_bank/features/mtg/mtg_set/models/model_set.dart';
 import 'package:collectors_bank/features/mtg/mtg_set/models/model_symbols.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
@@ -9,16 +10,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
 
 class CollectorsBankMtgHelperFunctions {
-  static Widget checkIfMtgImage(ModelMtgCard card, bool useArtCrop) {
+  static Widget checkIfMtgImage(ModelMtgCard card) {
     String image = card.image_uris.normal;
     if (image == "" && card.card_faces.isNotEmpty) {
       image = card.card_faces[0].image_uris.normal;
-    }
-    if (useArtCrop) {
-      image = card.image_uris.art_crop;
-      if (image == "" && card.card_faces.isNotEmpty) {
-        image = card.card_faces[0].image_uris.art_crop;
-      }
     }
     if (image == "") {
       return Column(
@@ -53,6 +48,18 @@ class CollectorsBankMtgHelperFunctions {
         ),
       );
     }
+  }
+
+  static Widget showMtgArtCrop(CurrentCardFace card) {
+    var networkImage = Image.network(card.image_uris.art_crop);
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: networkImage.image,
+          fit: BoxFit.scaleDown,
+        ),
+      ),
+    );
   }
 
   static Widget getSetCollected(
@@ -91,7 +98,7 @@ class CollectorsBankMtgHelperFunctions {
   }
 
   static List<Widget> showManaCost(
-      ModelMtgCard card, List<ModelSymbols> symbols) {
+      CurrentCardFace card, List<ModelSymbols> symbols) {
     List<Widget> manaCost = [];
     List<String> cardManaCostValues = [];
     if (card.mana_cost != "") {

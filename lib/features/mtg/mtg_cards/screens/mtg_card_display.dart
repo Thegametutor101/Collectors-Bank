@@ -321,7 +321,6 @@ class _MtgCardDisplay extends State<MtgCardDisplay> {
                 width: CollectorsBankDeviceUtils.getScreenWidth(context) - 30,
                 child: CollectorsBankMtgHelperFunctions.checkIfMtgImage(
                   card,
-                  false,
                 ),
               ),
             ),

@@ -5,6 +5,10 @@ class CollectorsBankColors {
 
   /// Generic
   static const Color transparent = Colors.transparent;
+  static const Color lightErrorColor = Color.fromARGB(255, 255, 0, 0);
+  static const Color lightSuccessColor = Color.fromARGB(255, 0, 255, 0);
+  static const Color darkErrorColor = Color.fromARGB(255, 130, 0, 0);
+  static const Color darkSuccessColor = Color.fromARGB(255, 0, 130, 0);
 
   ///Home Section Gradiants
   static const Gradient mtgBackgroundGradient =
@@ -42,6 +46,7 @@ class CollectorsBankColors {
 
   ///Dark
   static const Color darkPrimaryColor = Color.fromARGB(255, 250, 10, 10);
+  static const Color darkPrimaryTextColor = Color.fromARGB(255, 244, 67, 54);
   static const Color darkScaffoldColor = Color.fromARGB(255, 60, 60, 60);
   static const Color darkScaffoldAccentColor = Color.fromARGB(255, 84, 84, 84);
   static const Color darkTextColor = Color.fromARGB(255, 255, 255, 255);
@@ -50,6 +55,7 @@ class CollectorsBankColors {
 
   ///Light
   static const Color lightPrimaryColor = Color.fromARGB(255, 230, 60, 60);
+  static const Color lightPrimaryTextColor = Color.fromARGB(255, 244, 67, 54);
   static const Color lightScaffoldColor = Color.fromARGB(255, 225, 225, 225);
   static const Color lightScaffoldAccentColor =
       Color.fromARGB(255, 185, 185, 185);

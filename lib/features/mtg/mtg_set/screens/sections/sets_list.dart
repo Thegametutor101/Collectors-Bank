@@ -26,7 +26,6 @@ class _SetsListState extends State<SetsList> {
   Future updateCollected() async {
     var data = await CollectorsBankStorageMtg.instance.readMTGData();
     setState(() {
-      print("Updated");
       widget.mtgProfile = data;
     });
   }
