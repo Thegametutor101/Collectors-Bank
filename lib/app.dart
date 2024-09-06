@@ -1,8 +1,8 @@
 import 'package:collectors_bank/features/app_sections.dart';
-import 'package:collectors_bank/features/mtg/mtg_home.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/image_strings.dart';
 import 'package:collectors_bank/utils/constants/variables.dart';
+import 'package:collectors_bank/utils/helpers/router_helper.dart';
 import 'package:collectors_bank/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +17,8 @@ class CollectorsBank extends StatelessWidget {
       theme: CollectorsBankTheme.lightTheme,
       darkTheme: CollectorsBankTheme.darkTheme,
       title: CollectorsBankVariables.appName,
-      home: const HomePage(),
+      initialRoute: RouterHelper.getInitial(),
+      getPages: RouterHelper.routes,
     );
   }
 }
@@ -42,23 +43,23 @@ class HomePage extends StatelessWidget {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           children: [
-            const AppSection(
+            AppSection(
               defaultImage: CollectorsBankImageStrings.mtgDefault,
               pressedImage: CollectorsBankImageStrings.mtgPressed,
               backgroundGradient: CollectorsBankColors.mtgBackgroundGradient,
-              targetPage: MTGHome(),
+              targetPage: RouterHelper.getMtgHome(),
             ),
-            AppSection(
+            const AppSection(
               defaultImage: CollectorsBankImageStrings.pokDefault,
               pressedImage: CollectorsBankImageStrings.pokPressed,
               backgroundGradient: CollectorsBankColors.pokBackgroundGradient,
-              targetPage: Container(),
+              targetPage: "/",
             ),
-            AppSection(
+            const AppSection(
               defaultImage: CollectorsBankImageStrings.ygoDefault,
               pressedImage: CollectorsBankImageStrings.ygoPressed,
               backgroundGradient: CollectorsBankColors.ygoBackgroundGradient,
-              targetPage: Container(),
+              targetPage: "/",
             ),
           ],
         ),

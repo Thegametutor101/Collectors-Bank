@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_rulings.dart';
-import 'package:collectors_bank/features/mtg/mtg_sets/models/model_symbols.dart';
+import 'package:collectors_bank/features/mtg/mtg_set/models/model_symbols.dart';
 import 'package:http/http.dart' as http;
 import 'package:collectors_bank/utils/constants/api_constants.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
-import 'package:collectors_bank/features/mtg/mtg_sets/models/model_set.dart';
+import 'package:collectors_bank/features/mtg/mtg_set/models/model_set.dart';
 
 class CollectorsBankHttpServer {
   static Future<List<ModelMtgSet>> getMtgSets() async {

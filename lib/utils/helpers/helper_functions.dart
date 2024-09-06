@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CollectorsBankHelperFunctions {
   static showSnackBar(String message) {
@@ -101,5 +102,16 @@ class CollectorsBankHelperFunctions {
     } catch (_) {
       return null;
     }
+  }
+
+  static String checkPriceEmpty(String price) {
+    if (price == "") {
+      return "0.00";
+    }
+    return price;
+  }
+
+  static void openBrowser(String url) async {
+    await launchUrlString(url);
   }
 }

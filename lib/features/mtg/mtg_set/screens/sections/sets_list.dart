@@ -1,15 +1,15 @@
 import 'package:collectors_bank/common/profiles/mtg_profile.dart';
-import 'package:collectors_bank/features/mtg/mtg_sets/models/model_set.dart';
-import 'package:collectors_bank/features/mtg/mtg_sets/screens/mtg_set.dart';
+import 'package:collectors_bank/features/mtg/mtg_set/models/model_set.dart';
+import 'package:collectors_bank/features/mtg/mtg_set/screens/mtg_set.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
+import 'package:collectors_bank/utils/helpers/router_helper.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:collectors_bank/utils/theme/custom_themes/border_side_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class SetsList extends StatefulWidget {
@@ -26,6 +26,7 @@ class _SetsListState extends State<SetsList> {
   Future updateCollected() async {
     var data = await CollectorsBankStorageMtg.instance.readMTGData();
     setState(() {
+      print("Updated");
       widget.mtgProfile = data;
     });
   }
@@ -74,7 +75,8 @@ class _SetsListState extends State<SetsList> {
                   ),
                   FittedBox(
                     fit: BoxFit.fitWidth,
-                    child: Text(widget.sets[index].name),
+                    child: Text(
+                        "${widget.sets[index].name} (${widget.sets[index].code.toUpperCase()})"),
                   )
                 ],
               ),
@@ -88,7 +90,7 @@ class _SetsListState extends State<SetsList> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      widget.sets[index].code.toUpperCase(),
+                      widget.sets[index].released_at,
                       style: const TextStyle().copyWith(
                           color: dark
                               ? CollectorsBankColors.darkTextSecondaryColor
@@ -100,10 +102,13 @@ class _SetsListState extends State<SetsList> {
                 ),
               ),
               onTap: () async {
-                final back = await Get.to(MtgSetPage(set: widget.sets[index]));
-                if (back == "updateCollected") {
+                Navigator.pushNamed(
+                  context,
+                  RouterHelper.getMtgSet(),
+                  arguments: MtgSet(set: widget.sets[index]),
+                ).then((value) {
                   updateCollected();
-                }
+                });
               },
             );
           },

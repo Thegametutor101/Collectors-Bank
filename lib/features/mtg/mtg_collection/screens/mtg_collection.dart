@@ -1,5 +1,5 @@
 import 'package:collectors_bank/common/profiles/mtg_profile.dart';
-import 'package:collectors_bank/features/fetch_loaders.dart';
+import 'package:collectors_bank/features/fetch_loader.dart';
 import 'package:collectors_bank/features/mtg/mtg_collection/screens/mtg_set_collection.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
@@ -167,7 +167,7 @@ class _MtgCollection extends State<MtgCollection> {
                         onTap: () async {
                           // final back = await
                           Get.to(MtgSetCollection(
-                              setName: profile[index].profileSet.name,
+                              profileSet: profile[index].profileSet,
                               cards: profile[index].profileSet.cards));
                           // if (back == "updateCollected") {
                           //   updateCollected();

@@ -15,7 +15,7 @@ class AppSection extends StatelessWidget {
   final String defaultImage;
   final String pressedImage;
   final Gradient backgroundGradient;
-  final Widget targetPage;
+  final String targetPage;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class AppSection extends StatelessWidget {
           selectedIcon: Image(image: AssetImage(pressedImage)),
           iconSize: 250,
           onPressed: () {
-            Get.to(targetPage);
+            Get.toNamed(targetPage);
           },
         ),
       ),

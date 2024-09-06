@@ -10,8 +10,13 @@ import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:iconsax/iconsax.dart';
 
 class MtgCardDisplay extends StatefulWidget {
-  const MtgCardDisplay({super.key, required this.card});
+  const MtgCardDisplay({
+    super.key,
+    required this.setIcon,
+    required this.card,
+  });
 
+  final String setIcon;
   final ModelMtgCard card;
 
   @override
@@ -122,6 +127,7 @@ class _MtgCardDisplay extends State<MtgCardDisplay> {
             setCode: widget.card.set,
             name: widget.card.set_name,
             uri: widget.card.set_uri,
+            setIcon: widget.setIcon,
             collected: 0,
             cards: [],
           ),

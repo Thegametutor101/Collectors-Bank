@@ -1,28 +1,27 @@
-import 'package:collectors_bank/features/fetch_loaders.dart';
-import 'package:collectors_bank/features/mtg/mtg_sets/models/model_set.dart';
+import 'package:collectors_bank/features/fetch_loader.dart';
+import 'package:collectors_bank/features/mtg/mtg_set/models/model_set.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/constants/variables.dart';
 import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
+import 'package:collectors_bank/utils/helpers/router_helper.dart';
 import 'package:collectors_bank/utils/http/http_server_mtg.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 // ignore: must_be_immutable
-class MtgSetPage extends StatefulWidget {
-  const MtgSetPage({super.key, required this.set});
+class MtgSet extends StatefulWidget {
+  const MtgSet({super.key, required this.set});
 
   final ModelMtgSet set;
 
   @override
-  State<MtgSetPage> createState() => _MtgSetPage();
+  State<MtgSet> createState() => _MtgSet();
 }
 
-class _MtgSetPage extends State<MtgSetPage> {
+class _MtgSet extends State<MtgSet> {
   @override
   Widget build(BuildContext context) {
-    // Get.back(result: "updateCollected");
     String setName = widget.set.name;
     return Scaffold(
       appBar: AppBar(
@@ -61,11 +60,12 @@ class _MtgSetPage extends State<MtgSetPage> {
                     width: 80,
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => MtgCard(card: cards[index]),
-                          ),
+                          RouterHelper.getMtgCard(),
+                          arguments: MtgCard(
+                              setIcon: widget.set.icon_svg_uri,
+                              card: cards[index]),
                         );
                       },
                       child: Padding(

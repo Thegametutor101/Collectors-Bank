@@ -1,4 +1,4 @@
-import 'package:collectors_bank/features/mtg/mtg_sets/controllers/all_sets_controller.dart';
+import 'package:collectors_bank/features/mtg/mtg_set/controllers/all_sets_controller.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';

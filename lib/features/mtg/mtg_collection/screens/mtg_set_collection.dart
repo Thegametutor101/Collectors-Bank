@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 
 class MtgSetCollection extends StatefulWidget {
   const MtgSetCollection(
-      {super.key, required this.setName, required this.cards});
+      {super.key, required this.profileSet, required this.cards});
 
-  final String setName;
+  final MtgProfileSet profileSet;
   final List<MtgProfileCard> cards;
 
   @override
@@ -26,7 +26,7 @@ class _MtgSetCollection extends State<MtgSetCollection> {
     widget.cards.sort((a, b) => a.collectorNumber.compareTo(b.collectorNumber));
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.setName),
+        title: Text(widget.profileSet.name),
       ),
       body: Padding(
         padding: const EdgeInsets.all(CollectorsBankSizes.md),
@@ -51,7 +51,10 @@ class _MtgSetCollection extends State<MtgSetCollection> {
                     // ignore: use_build_context_synchronously
                     context,
                     MaterialPageRoute(
-                      builder: (_) => MtgCard(card: card),
+                      builder: (_) => MtgCard(
+                        setIcon: widget.profileSet.setIcon,
+                        card: card,
+                      ),
                     ),
                   );
                 },

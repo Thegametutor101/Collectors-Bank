@@ -7,8 +7,13 @@ import 'package:collectors_bank/utils/theme/custom_themes/border_side_theme.dart
 import 'package:flutter/material.dart';
 
 class MtgCardVersions extends StatefulWidget {
-  const MtgCardVersions({super.key, required this.cards});
+  const MtgCardVersions({
+    super.key,
+    required this.setIcon,
+    required this.cards,
+  });
 
+  final String setIcon;
   final List<ModelMtgCard> cards;
 
   @override
@@ -69,6 +74,7 @@ class _MtgCardVersions extends State<MtgCardVersions> {
                     context,
                     MaterialPageRoute(
                       builder: (_) => MtgCard(
+                        setIcon: widget.setIcon,
                         card: widget.cards[index],
                       ),
                     ),

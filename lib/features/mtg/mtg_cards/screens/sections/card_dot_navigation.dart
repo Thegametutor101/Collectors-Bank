@@ -4,8 +4,8 @@ import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class CardVariationsDotNavigation extends StatelessWidget {
-  const CardVariationsDotNavigation({super.key});
+class CardDotNavigation extends StatelessWidget {
+  const CardDotNavigation({super.key});
   @override
   Widget build(BuildContext context) {
     final controller = CardVariationsController.instance;

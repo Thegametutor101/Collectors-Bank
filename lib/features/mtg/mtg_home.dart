@@ -1,5 +1,4 @@
-import 'package:collectors_bank/features/mtg/mtg_collection/screens/mtg_collection.dart';
-import 'package:collectors_bank/features/mtg/mtg_sets/screens/mtg_sets.dart';
+import 'package:collectors_bank/features/mtg/controllers/mtg_navigation_controller.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:collectors_bank/utils/theme/custom_themes/navigationbar_theme.dart';
@@ -20,15 +19,9 @@ class _MTGHomeState extends State<MTGHome> {
   Widget build(BuildContext context) {
     Get.put(CollectorsBankStorageMtg());
     // CollectorsBankStorageMtg.instance.deleteMTGData();
-    final controller = Get.put(NavigationController());
+    final controller = Get.put(MtgNavigationController());
     bool dark = CollectorsBankDeviceUtils.isDarkMode(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Magic: The Gathering",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
       body: controller.screens[controller.selectedIndex.value],
       bottomNavigationBar: Obx(
         () => NavigationBarTheme(
@@ -36,49 +29,40 @@ class _MTGHomeState extends State<MTGHome> {
               ? CollectorsBankNavigationBarTheme.darkNavigationBarTheme
               : CollectorsBankNavigationBarTheme.lightNavigationBarTheme,
           child: NavigationBar(
-              height: 60,
-              elevation: 0,
-              selectedIndex: controller.selectedIndex.value,
-              onDestinationSelected: (index) {
-                setState(() {
-                  controller.selectedIndex.value = index;
-                });
-              },
-              destinations: const [
-                NavigationDestination(
-                    icon: Icon(
-                      Iconsax.book,
-                    ),
-                    label: "Catalogue"),
-                NavigationDestination(
-                    icon: Icon(
-                      Iconsax.bank,
-                    ),
-                    label: "Collection"),
-                NavigationDestination(
-                    icon: Icon(
-                      Iconsax.note,
-                    ),
-                    label: "Decks"),
-                NavigationDestination(
-                    icon: Icon(
-                      Iconsax.camera,
-                    ),
-                    label: "Scan"),
-              ]),
+            height: 60,
+            elevation: 0,
+            selectedIndex: controller.selectedIndex.value,
+            onDestinationSelected: (index) {
+              setState(() {
+                controller.selectedIndex.value = index;
+              });
+            },
+            animationDuration: const Duration(seconds: 2),
+            destinations: const [
+              NavigationDestination(
+                  icon: Icon(
+                    Iconsax.book,
+                  ),
+                  label: "Catalogue"),
+              NavigationDestination(
+                  icon: Icon(
+                    Iconsax.bank,
+                  ),
+                  label: "Collection"),
+              NavigationDestination(
+                  icon: Icon(
+                    Iconsax.note,
+                  ),
+                  label: "Decks"),
+              NavigationDestination(
+                  icon: Icon(
+                    Iconsax.camera,
+                  ),
+                  label: "Scan"),
+            ],
+          ),
         ),
       ),
     );
   }
-}
-
-class NavigationController extends GetxController {
-  final Rx<int> selectedIndex = 0.obs;
-
-  final screens = [
-    const MTGSets(),
-    const MtgCollection(),
-    Container(color: Colors.deepPurple),
-    Container(color: Colors.amber)
-  ];
 }

@@ -24,6 +24,22 @@ class CollectorsBankColors {
     "B": Color(0xC71BCBDD),
   };
 
+  /// Mtg Legalities
+  static const Map<String, Color> lightMtgLegalities = {
+    "legal": Color.fromARGB(255, 0, 255, 0),
+    "not_legal": Color.fromARGB(255, 180, 180, 180),
+    "restricted": Color.fromARGB(255, 255, 255, 0),
+    "banned": Color.fromARGB(255, 255, 0, 0),
+    "": Color.fromARGB(255, 0, 0, 255),
+  };
+  static const Map<String, Color> darkMtgLegalities = {
+    "legal": Color.fromARGB(255, 0, 130, 0),
+    "not_legal": Color.fromARGB(255, 100, 100, 100),
+    "restricted": Color.fromARGB(255, 130, 130, 0),
+    "banned": Color.fromARGB(255, 130, 0, 0),
+    "": Color.fromARGB(255, 0, 0, 130),
+  };
+
   ///Dark
   static const Color darkPrimaryColor = Color.fromARGB(255, 250, 10, 10);
   static const Color darkScaffoldColor = Color.fromARGB(255, 60, 60, 60);
