@@ -22,9 +22,9 @@ class _MtgCatalogueNavigationState extends State<MtgCatalogueNavigation> {
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
           builder: (BuildContext context) {
-            if (settings.name == RouterHelper.getMtgSet()) {
+            if (settings.name == RouterHelper.getMtgSetCatalogue()) {
               return settings.arguments as MtgSet;
-            } else if (settings.name == RouterHelper.getMtgCard()) {
+            } else if (settings.name == RouterHelper.getMtgCardCatalogue()) {
               return settings.arguments as MtgCard;
             }
             return const MtgCatalogue();

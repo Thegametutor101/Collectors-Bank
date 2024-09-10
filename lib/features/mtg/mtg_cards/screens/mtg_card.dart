@@ -4,7 +4,7 @@ import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card_display.
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card_info.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card_versions.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/sections/card_dot_navigation.dart';
-import 'package:collectors_bank/utils/http/http_server_mtg.dart';
+import 'package:collectors_bank/utils/http/http_mtg.dart';
 import 'package:flutter/material.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:get/get.dart';
@@ -12,11 +12,11 @@ import 'package:get/get.dart';
 class MtgCard extends StatelessWidget {
   const MtgCard({
     super.key,
-    required this.setIcon,
+    required this.isCatalogue,
     required this.card,
   });
 
-  final String setIcon;
+  final bool isCatalogue;
   final ModelMtgCard card;
 
   @override
@@ -33,7 +33,7 @@ class MtgCard extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<List<ModelMtgCard>>(
-        future: CollectorsBankHttpServer.getMtgCardsByName(card.name),
+        future: CollectorsBankHttpMtg.getMtgCardsByName(card.name),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||
               snapshot.connectionState == ConnectionState.waiting) {
@@ -58,9 +58,10 @@ class MtgCard extends StatelessWidget {
                   controller: controller.pageController,
                   onPageChanged: controller.updatePageIndicator,
                   children: [
-                    MtgCardDisplay(setIcon: setIcon, card: card),
-                    MtgCardInfo(setIcon: setIcon, card: card),
-                    MtgCardVersions(setIcon: setIcon, cards: cardVersions)
+                    MtgCardDisplay(card: card),
+                    MtgCardInfo(isCatalogue: isCatalogue, card: card),
+                    MtgCardVersions(
+                        isCatalogue: isCatalogue, cards: cardVersions)
                   ],
                 ),
               ],

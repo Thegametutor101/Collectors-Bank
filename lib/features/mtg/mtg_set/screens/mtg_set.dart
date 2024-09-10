@@ -7,7 +7,7 @@ import 'package:collectors_bank/utils/constants/variables.dart';
 import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
 import 'package:collectors_bank/utils/helpers/router_helper.dart';
-import 'package:collectors_bank/utils/http/http_server_mtg.dart';
+import 'package:collectors_bank/utils/http/http_mtg.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
@@ -42,8 +42,8 @@ class _MtgSet extends State<MtgSet> {
   void openCard(ModelMtgCard card) {
     Navigator.pushNamed(
       context,
-      RouterHelper.getMtgCard(),
-      arguments: MtgCard(setIcon: widget.set.icon_svg_uri, card: card),
+      RouterHelper.getMtgCardCatalogue(),
+      arguments: MtgCard(isCatalogue: true, card: card),
     ).then(
       (value) => loadProfile(),
     );
@@ -69,7 +69,7 @@ class _MtgSet extends State<MtgSet> {
         title: Text(setName),
       ),
       body: FutureBuilder<List<ModelMtgCard>>(
-        future: CollectorsBankHttpServer.getMtgCards(
+        future: CollectorsBankHttpMtg.getMtgCards(
             widget.set.code, widget.set.search_uri),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||

@@ -1,14 +1,14 @@
 import 'package:collectors_bank/common/profiles/mtg_profile.dart';
 import 'package:collectors_bank/features/fetch_loader.dart';
 import 'package:collectors_bank/features/mtg/mtg_set/controllers/all_sets_controller.dart';
-import 'package:collectors_bank/features/mtg/mtg_set/screens/sections/sets_dot_navigation.dart';
-import 'package:collectors_bank/features/mtg/mtg_set/screens/sections/sets_info_icon.dart';
-import 'package:collectors_bank/features/mtg/mtg_set/screens/sections/sets_list.dart';
-import 'package:collectors_bank/features/mtg/mtg_set/screens/sections/sets_search_icon.dart';
+import 'package:collectors_bank/features/mtg/mtg_catalogue/screens/sections/sets_dot_navigation.dart';
+import 'package:collectors_bank/features/mtg/mtg_catalogue/screens/sections/sets_info_icon.dart';
+import 'package:collectors_bank/features/mtg/mtg_catalogue/screens/sections/catalogue_list.dart';
+import 'package:collectors_bank/features/mtg/mtg_catalogue/screens/sections/sets_search_icon.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:flutter/material.dart';
 import 'package:collectors_bank/features/mtg/mtg_set/models/model_set.dart';
-import 'package:collectors_bank/utils/http/http_server_mtg.dart';
+import 'package:collectors_bank/utils/http/http_mtg.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
@@ -56,7 +56,7 @@ class _MtgCatalogueState extends State<MtgCatalogue> {
         ),
       ),
       body: FutureBuilder<List<ModelMtgSet>>(
-        future: CollectorsBankHttpServer.getMtgSets(),
+        future: CollectorsBankHttpMtg.getMtgSets(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||
               snapshot.connectionState == ConnectionState.waiting) {
@@ -105,9 +105,9 @@ class _MtgCatalogueState extends State<MtgCatalogue> {
                   controller: controller.pageController,
                   onPageChanged: controller.updatePageIndicator,
                   children: [
-                    SetsList(sets: setsPrimary, mtgProfile: mtgProfile),
-                    SetsList(sets: setsSecondary, mtgProfile: mtgProfile),
-                    SetsList(sets: setsMisc, mtgProfile: mtgProfile),
+                    CatalogueList(sets: setsPrimary, mtgProfile: mtgProfile),
+                    CatalogueList(sets: setsSecondary, mtgProfile: mtgProfile),
+                    CatalogueList(sets: setsMisc, mtgProfile: mtgProfile),
                   ],
                 ),
               ],

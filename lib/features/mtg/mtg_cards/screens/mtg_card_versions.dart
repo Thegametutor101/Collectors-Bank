@@ -10,11 +10,11 @@ import 'package:flutter/material.dart';
 class MtgCardVersions extends StatefulWidget {
   const MtgCardVersions({
     super.key,
-    required this.setIcon,
+    required this.isCatalogue,
     required this.cards,
   });
 
-  final String setIcon;
+  final bool isCatalogue;
   final List<ModelMtgCard> cards;
 
   @override
@@ -72,9 +72,11 @@ class _MtgCardVersions extends State<MtgCardVersions> {
                 onTap: () {
                   Navigator.pushReplacementNamed(
                     context,
-                    RouterHelper.getMtgCard(),
+                    widget.isCatalogue
+                        ? RouterHelper.getMtgCardCatalogue()
+                        : RouterHelper.getMtgCardCollection(),
                     arguments: MtgCard(
-                      setIcon: widget.setIcon,
+                      isCatalogue: widget.isCatalogue,
                       card: widget.cards[index],
                     ),
                   );

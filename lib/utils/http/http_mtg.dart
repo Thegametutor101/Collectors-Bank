@@ -6,7 +6,7 @@ import 'package:collectors_bank/utils/constants/api_constants.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_set/models/model_set.dart';
 
-class CollectorsBankHttpServer {
+class CollectorsBankHttpMtg {
   static Future<List<ModelMtgSet>> getMtgSets() async {
     final response = await http.get(Uri.parse(APIConstants.scryfallSets),
         headers: {'Accept': 'application/json'});
@@ -17,6 +17,20 @@ class CollectorsBankHttpServer {
         result.add(ModelMtgSet.fromJson(set));
       }
       return result;
+    } else {
+      throw Exception(
+          'Sorry!\nFailed to retreive Magic the Gathering sets from our servers.');
+    }
+  }
+
+  static Future<ModelMtgSet> getMtgSetByCode(String code) async {
+    final response = await http.get(
+        Uri.parse("${APIConstants.scryfallSets}/$code"),
+        headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      ModelMtgSet set = ModelMtgSet.fromJson(jsonData);
+      return set;
     } else {
       throw Exception(
           'Sorry!\nFailed to retreive Magic the Gathering sets from our servers.');

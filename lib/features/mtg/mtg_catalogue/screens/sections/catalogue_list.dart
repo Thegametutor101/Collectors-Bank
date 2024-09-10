@@ -12,17 +12,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // ignore: must_be_immutable
-class SetsList extends StatefulWidget {
-  SetsList({super.key, required this.sets, required this.mtgProfile});
+class CatalogueList extends StatefulWidget {
+  CatalogueList({super.key, required this.sets, required this.mtgProfile});
 
   final List<ModelMtgSet> sets;
   List<MtgProfile> mtgProfile;
 
   @override
-  State<SetsList> createState() => _SetsListState();
+  State<CatalogueList> createState() => _CatalogueListState();
 }
 
-class _SetsListState extends State<SetsList> {
+class _CatalogueListState extends State<CatalogueList> {
   Future updateCollected() async {
     var data = await CollectorsBankStorageMtg.instance.readMTGData();
     setState(() {
@@ -103,7 +103,7 @@ class _SetsListState extends State<SetsList> {
               onTap: () async {
                 Navigator.pushNamed(
                   context,
-                  RouterHelper.getMtgSet(),
+                  RouterHelper.getMtgSetCatalogue(),
                   arguments: MtgSet(set: widget.sets[index]),
                 ).then((value) {
                   updateCollected();

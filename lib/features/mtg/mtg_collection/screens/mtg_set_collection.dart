@@ -3,7 +3,8 @@ import 'package:collectors_bank/features/mtg/mtg_cards/models/model_card.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
 import 'package:collectors_bank/utils/constants/variables.dart';
-import 'package:collectors_bank/utils/http/http_server_mtg.dart';
+import 'package:collectors_bank/utils/helpers/router_helper.dart';
+import 'package:collectors_bank/utils/http/http_mtg.dart';
 import 'package:flutter/material.dart';
 
 class MtgSetCollection extends StatefulWidget {
@@ -45,16 +46,15 @@ class _MtgSetCollection extends State<MtgSetCollection> {
               child: InkWell(
                 onTap: () async {
                   ModelMtgCard card =
-                      await CollectorsBankHttpServer.getMtgCardsByUri(
+                      await CollectorsBankHttpMtg.getMtgCardsByUri(
                           widget.cards[index].uri);
-                  Navigator.push(
+                  Navigator.pushNamed(
                     // ignore: use_build_context_synchronously
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => MtgCard(
-                        setIcon: widget.profileSet.setIcon,
-                        card: card,
-                      ),
+                    RouterHelper.getMtgCardCollection(),
+                    arguments: MtgCard(
+                      isCatalogue: false,
+                      card: card,
                     ),
                   );
                 },

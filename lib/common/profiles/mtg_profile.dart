@@ -14,8 +14,6 @@ class MtgProfile {
               json["profileSets"]["name"]),
           uri: CollectorsBankHelperFunctions.checkIfStringNull(
               json["profileSets"]["uri"]),
-          setIcon: CollectorsBankHelperFunctions.checkIfStringNull(
-              json["profileSets"]["setIcon"]),
           collected: CollectorsBankHelperFunctions.checkIfIntNull(
               json["profileSets"]["collected"]),
           cards: json["profileSets"]["profileCards"]
@@ -28,7 +26,6 @@ class MtgProfile {
         "setCode": profileSet.setCode,
         "name": profileSet.name,
         "uri": profileSet.uri,
-        "setIcon": profileSet.setIcon,
         "collected": profileSet.collected,
         "profileCards": _loopCardsToJson(profileSet.cards)
       }
@@ -74,7 +71,6 @@ class MtgProfileSet {
   final String setCode;
   final String name;
   final String uri;
-  final String setIcon;
   int collected;
   List<MtgProfileCard> cards;
 
@@ -82,7 +78,6 @@ class MtgProfileSet {
       {required this.setCode,
       required this.name,
       required this.uri,
-      required this.setIcon,
       required this.collected,
       required this.cards});
 }

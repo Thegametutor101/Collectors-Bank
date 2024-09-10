@@ -4,6 +4,7 @@ import 'package:collectors_bank/features/mtg/mtg_cards/models/model_image_uris.d
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_related_card_objects.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/models/model_rulings.dart';
 import 'package:collectors_bank/features/mtg/mtg_cards/screens/mtg_card.dart';
+import 'package:collectors_bank/features/mtg/mtg_set/models/model_set.dart';
 import 'package:collectors_bank/features/mtg/mtg_set/models/model_symbols.dart';
 import 'package:collectors_bank/utils/constants/colors.dart';
 import 'package:collectors_bank/utils/constants/sizes.dart';
@@ -11,7 +12,7 @@ import 'package:collectors_bank/utils/device/device_utility.dart';
 import 'package:collectors_bank/utils/helpers/helper_functions.dart';
 import 'package:collectors_bank/utils/helpers/mtg_helper_functions.dart';
 import 'package:collectors_bank/utils/helpers/router_helper.dart';
-import 'package:collectors_bank/utils/http/http_server_mtg.dart';
+import 'package:collectors_bank/utils/http/http_mtg.dart';
 import 'package:collectors_bank/utils/theme/custom_themes/border_side_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,11 +20,11 @@ import 'package:flutter_svg/svg.dart';
 class MtgCardInfo extends StatefulWidget {
   const MtgCardInfo({
     super.key,
-    required this.setIcon,
+    required this.isCatalogue,
     required this.card,
   });
 
-  final String setIcon;
+  final bool isCatalogue;
   final ModelMtgCard card;
 
   @override
@@ -114,8 +115,8 @@ class _MtgCardInfo extends State<MtgCardInfo> {
 
   Widget getRulings(bool dark, ModelMtgCard card) {
     return FutureBuilder<List<ModelRulings>>(
-      future: CollectorsBankHttpServer.getMtgCardRulings(
-          card.name, card.rulings_uri),
+      future:
+          CollectorsBankHttpMtg.getMtgCardRulings(card.name, card.rulings_uri),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.data == null ||
             snapshot.connectionState == ConnectionState.waiting) {
@@ -272,7 +273,7 @@ class _MtgCardInfo extends State<MtgCardInfo> {
 
   Widget getRelatedCard(bool dark, RelatedCardObjects relatedCard) {
     return FutureBuilder<ModelMtgCard>(
-      future: CollectorsBankHttpServer.getMtgCardsByUri(relatedCard.uri),
+      future: CollectorsBankHttpMtg.getMtgCardsByUri(relatedCard.uri),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.data == null ||
             snapshot.connectionState == ConnectionState.waiting) {
@@ -337,9 +338,11 @@ class _MtgCardInfo extends State<MtgCardInfo> {
           onTap: () {
             Navigator.pushNamed(
               context,
-              RouterHelper.getMtgCard(),
+              widget.isCatalogue
+                  ? RouterHelper.getMtgCardCatalogue()
+                  : RouterHelper.getMtgCardCollection(),
               arguments: MtgCard(
-                setIcon: widget.setIcon,
+                isCatalogue: widget.isCatalogue,
                 card: card,
               ),
             );
@@ -372,7 +375,7 @@ class _MtgCardInfo extends State<MtgCardInfo> {
       padding: const EdgeInsets.symmetric(
           horizontal: CollectorsBankSizes.defaultSpace),
       child: FutureBuilder<List<ModelSymbols>>(
-        future: CollectorsBankHttpServer.getMtgSymbols(),
+        future: CollectorsBankHttpMtg.getMtgSymbols(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null ||
               snapshot.connectionState == ConnectionState.waiting) {
@@ -432,7 +435,6 @@ class _MtgCardInfo extends State<MtgCardInfo> {
                     /// type_line + rarity (logo?)
                     CardInfoRarityAndType(
                       dark: dark,
-                      widget: widget,
                       card: card,
                       cardFace: cardFace,
                     ),
@@ -943,14 +945,27 @@ class CardInfoPrices extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.topLeft,
-            child: Text(
-              "Prices",
-              style: TextStyle(
-                color: dark
-                    ? CollectorsBankColors.darkPrimaryTextColor
-                    : CollectorsBankColors.lightPrimaryTextColor,
-                fontSize: CollectorsBankSizes.fontSizeLg,
-              ),
+            child: Row(
+              children: [
+                Text(
+                  "Prices ",
+                  style: TextStyle(
+                    color: dark
+                        ? CollectorsBankColors.darkPrimaryTextColor
+                        : CollectorsBankColors.lightPrimaryTextColor,
+                    fontSize: CollectorsBankSizes.fontSizeLg,
+                  ),
+                ),
+                Text(
+                  "(Source: Scryfall)",
+                  style: TextStyle(
+                    color: dark
+                        ? CollectorsBankColors.darkTextSecondaryColor
+                        : CollectorsBankColors.lightTextSecondaryColor,
+                    fontSize: CollectorsBankSizes.fontSizeXs,
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
@@ -1154,36 +1169,70 @@ class CardInfoOracleText extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CardInfoRarityAndType extends StatelessWidget {
   const CardInfoRarityAndType({
     super.key,
     required this.dark,
-    required this.widget,
     required this.card,
     required this.cardFace,
   });
 
   final bool dark;
-  final MtgCardInfo widget;
   final ModelMtgCard card;
   final CurrentCardFace cardFace;
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: CollectorsBankSizes.sm),
-          child: SizedBox(
+  Widget getSetIcon(ModelMtgCard card) {
+    return FutureBuilder<ModelMtgSet>(
+      future: CollectorsBankHttpMtg.getMtgSetByCode(card.set),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.data == null ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasError) {
+          return const Center(
+            child: Text('Error fetching rulings for this card.'),
+          );
+        }
+        if (snapshot.connectionState == ConnectionState.done) {
+          ModelMtgSet set = snapshot.data;
+          return SizedBox(
             width: CollectorsBankSizes.iconMd,
             height: CollectorsBankSizes.iconMd,
             child: SvgPicture.network(
-              widget.setIcon,
+              set.icon_svg_uri,
               // ignore: deprecated_member_use
               color: CollectorsBankColors
                   .mtgRarities[card.rarity.substring(0, 1).toUpperCase()],
             ),
-          ),
+          );
+        }
+        return const Center(
+          child: Text('Error fetching rulings for this card.'),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    getSetIcon(card);
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: CollectorsBankSizes.sm),
+          child: getSetIcon(card),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(
