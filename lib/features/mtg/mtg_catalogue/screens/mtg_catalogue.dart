@@ -1,15 +1,16 @@
 import 'package:collectors_bank/common/profiles/mtg_profile.dart';
 import 'package:collectors_bank/features/fetch_loader.dart';
+import 'package:collectors_bank/features/mtg/mtg_search/screens/mtg_search.dart';
 import 'package:collectors_bank/features/mtg/mtg_set/controllers/all_sets_controller.dart';
 import 'package:collectors_bank/features/mtg/mtg_catalogue/screens/sections/sets_dot_navigation.dart';
-import 'package:collectors_bank/features/mtg/mtg_catalogue/screens/sections/sets_info_icon.dart';
 import 'package:collectors_bank/features/mtg/mtg_catalogue/screens/sections/catalogue_list.dart';
-import 'package:collectors_bank/features/mtg/mtg_catalogue/screens/sections/sets_search_icon.dart';
+import 'package:collectors_bank/utils/helpers/router_helper.dart';
 import 'package:collectors_bank/utils/local_storage/storage_mtg.dart';
 import 'package:flutter/material.dart';
 import 'package:collectors_bank/features/mtg/mtg_set/models/model_set.dart';
 import 'package:collectors_bank/utils/http/http_mtg.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 // ignore: must_be_immutable
 class MtgCatalogue extends StatefulWidget {
@@ -54,6 +55,29 @@ class _MtgCatalogueState extends State<MtgCatalogue> {
           "Magic: The Gathering",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: <Widget>[
+          //Info icon of lists
+          IconButton(
+            icon: const Icon(
+              Iconsax.info_circle,
+            ),
+            onPressed: () {},
+          ),
+
+          //Search Bar
+          IconButton(
+            icon: const Icon(
+              Iconsax.search_normal_1,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                RouterHelper.getMtgSearchCatalogue(),
+                arguments: MtgSearch(searchTab: "Catalogue"),
+              );
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<List<ModelMtgSet>>(
         future: CollectorsBankHttpMtg.getMtgSets(),
@@ -91,14 +115,8 @@ class _MtgCatalogueState extends State<MtgCatalogue> {
             }
             return Stack(
               children: [
-                //Info icon of lists
-                const SetsInfoIcon(),
-
                 //Dot Navigation SmoothPageIndicator
                 const SetsDotNavigation(),
-
-                //Search Bar
-                const SetsSearchIcon(),
 
                 //ListView for sets
                 PageView(

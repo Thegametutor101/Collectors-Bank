@@ -74,22 +74,42 @@ class _MtgCardDisplay extends State<MtgCardDisplay> {
       if (set.profileSet.setCode == widget.card.set) {
         for (var card in set.profileSet.cards) {
           if (card.cardCode == widget.card.id) {
+            int actionCollected = 0;
+            bool allZero = true;
+            bool allOne = true;
+            MtgProfileCardFinishes activeFinish = MtgProfileCardFinishes(
+              finish: selectedFinish,
+              owned: 0,
+              inDecks: 0,
+            );
             for (var finish in card.finishes) {
+              if (allZero) {
+                finish.owned == 0 ? allZero = true : allZero = false;
+              }
+              if (allOne) {
+                finish.owned == 1 ? allOne = true : allOne = false;
+              }
               if (finish.finish == selectedFinish) {
-                if (add) {
-                  finish.owned++;
-                  if (finish.owned == 1) {
-                    set.profileSet.collected++;
-                  }
-                } else {
-                  if (finish.owned > 0) {
-                    finish.owned--;
-                    if (finish.owned == 0) {
-                      set.profileSet.collected--;
-                    }
-                  }
+                activeFinish = finish;
+              }
+            }
+            if (add) {
+              activeFinish.owned++;
+              if (allZero && activeFinish.owned == 1) {
+                actionCollected++;
+              }
+            } else {
+              if (activeFinish.owned > 0) {
+                activeFinish.owned--;
+                if (!allOne && activeFinish.owned == 0) {
+                  actionCollected--;
                 }
               }
+            }
+            if (actionCollected == 1) {
+              set.profileSet.collected++;
+            } else if (actionCollected == -1) {
+              set.profileSet.collected--;
             }
           }
         }

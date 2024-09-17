@@ -88,6 +88,44 @@ class CollectorsBankHttpMtg {
     }
   }
 
+  static Future<List<ModelMtgCard>> getMtgCardsByNamePart(
+      String cardNamePart) async {
+    var response = await http.get(
+        Uri.parse(
+            '${APIConstants.scryfallCardsSearch}include_extras=true&include_variations=true&order=set&q=name:"$cardNamePart"&unique=prints'),
+        headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      List<ModelMtgCard> result = [];
+      for (var cards in jsonData['data']) {
+        result.add(ModelMtgCard.fromJson(cards));
+      }
+      return result;
+    } else {
+      throw Exception(
+          'Sorry!\nFailed to retreive cards with "$cardNamePart" in it\'s name from our servers.');
+    }
+  }
+
+  static Future<List<ModelMtgCard>> getMtgCardsBySearch(
+      String criterias) async {
+    var response = await http.get(
+        Uri.parse(
+            '${APIConstants.scryfallCardsSearch}include_extras=true&include_variations=true&order=set&q="$criterias"'),
+        headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      List<ModelMtgCard> result = [];
+      for (var cards in jsonData['data']) {
+        result.add(ModelMtgCard.fromJson(cards));
+      }
+      return result;
+    } else {
+      throw Exception(
+          'Sorry!\nFailed to retreive information from our servers.');
+    }
+  }
+
   static Future<ModelMtgCard> getMtgCardsByUri(String uri) async {
     var response =
         await http.get(Uri.parse(uri), headers: {'Accept': 'application/json'});

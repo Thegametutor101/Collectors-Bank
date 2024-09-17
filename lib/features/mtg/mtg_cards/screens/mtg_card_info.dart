@@ -67,11 +67,11 @@ class _MtgCardInfo extends State<MtgCardInfo> {
     }
   }
 
-  void changeCardFace(CurrentCardFace _cardFace) {
+  void changeCardFace(CurrentCardFace cardFace) {
     ModelMtgCard card = widget.card;
     int index = 0;
     setState(() {
-      if (_cardFace.name == card.card_faces[0].name) {
+      if (cardFace.name == card.card_faces[0].name) {
         index = 1;
       }
       cardFace = CurrentCardFace(
